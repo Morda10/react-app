@@ -1,7 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
-
+const middleware = require('./middleware/auth');
 const app = express();
 
 // Connect Database
@@ -13,6 +13,7 @@ app.use(express.json());
 // Define Routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/user', require('./routes/api/user'));
+//app.use('/api/user', middleware, require('./routes/api/user'));
 
 
 // Serve static assets in production

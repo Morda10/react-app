@@ -1,24 +1,21 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require("express-validator");
 
-const User = require('../../models/User');
+const User = require("../../models/User");
 
-
-
-  router.get('/:id',async (req,res) => {
-    try {
-      const {id} = req.params;
-      const user = await User.findById(id);
-      if(!user){
-          res.send(400).json("not found");
-      }
-      return res.status(200).json(user);
-
-    } catch (error) {
-      console.log("error");
+router.post("/", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    let user = await User.findOne({ email });
+    if (user) {
+      console.log("logged");
+      return res.status(200).json("logged in");
     }
+    return res.status(400).json({ errors: [{ msg: "Wrong credencials" }] });
+  } catch (error) {
+    console.log("Server error");
+  }
+});
 
-  });
-
-  module.exports = router;
+module.exports = router;

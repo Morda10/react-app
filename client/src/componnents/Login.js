@@ -1,126 +1,121 @@
-import React,{useState, useEffect} from 'react'
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from "react";
 import {
-    TextField,
-    Button,
-    Checkbox,
-    Radio,
-    FormControlLabel,
-    Select,
-    MenuItem
-  } from "@material-ui/core";
- 
-  import axios from 'axios';
+  Formik,
+  Form,
+  // Field,
+  // ErrorMessage,
+  // withFormik,
+  // yupToFormErrors,
+} from "formik";
+import * as Yup from "yup";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  //TextField,
+  Button,
+  // Checkbox,
+  // Radio,
+  // FormControlLabel,
+  // Select,
+  // MenuItem,
+} from "@material-ui/core";
+import MyTextField from "./Input/Input";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      '& > *': {
-        margin: theme.spacing(1),
-        width: '40ch',
-      },
-      submit: {
-        margin: theme.spacing(3, 0, 2),
-      }
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email("Email not valid").required("Email is required"),
+  password: Yup.string()
+    .min(5, "Password must be 5 characters or longer")
+    .required("password is required"),
+});
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+      width: "25ch",
     },
-  }));
+  },
+}));
 
 const Login = () => {
+  const history = useHistory();
+  const [users, setUsers] = useState([]);
+  const classes = useStyles();
 
-    const classes = useStyles()
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => { // async on useEffect like this
-      const fetchData = async () => {
-        const res = await axios.get('/api/users/');
-        setUsers(res.data);
-        console.log(res.data);
-      }
-      fetchData()     
-    },[]);
-
-    const userslist = users.map(u => (
-      <div key={u._id}>
-          <li>name: {u.name}</li>
-          <li>email: {u.email}</li>
-          <Button
-                variant="contained"
-                color="secondary"  
-                onClick={() => f(u._id)}             
-               >
-        Delete
-        </Button>        
-                  
-      </div>
-     ))
-
-  
-    const submitHandler = async (event) => { 
-     try {
-      event.preventDefault();
-      await axios.post('/api/users/', {name,email})
-      console.log("submitted");
-     } catch (error) {
-       console.log(error);
-       
-     }
-     const res = await axios.get('/api/users/');
+  //take care of cleanup
+  useEffect(() => {
+    // async on useEffect like this
+    const fetchData = async () => {
+      const res = await axios.get("/api/users/");
       setUsers(res.data);
-    }
-  
-  
-  
-    const handleChange = (event) => {
-      setName(event.target.value);
-    }
+    };
+    fetchData();
+    return () => {
+      setUsers([]);
+    };
+  }, []);
 
-    async function f(id){
-      const res = await axios.delete(`/api/users/${id}`);
-      const newUsers = [...users].filter(u => u._id !== id);
-      //console.log(newUsers);
-      setUsers(newUsers);
+  const userslist = users.map((u) => (
+    <div key={u._id}>
+      <li>name: {u.name}</li>
+      <li>email: {u.email}</li>
+    </div>
+  ));
 
-    }
-  
-
-    return (
-        <div style={{textAlign: "center"}}>
-            <form 
-                className={classes.root} 
-                noValidate 
-                autoComplete="off"
-                onSubmit={submitHandler}
-            >
-            <TextField
-                placeholder="name"
-                id="standard-basic"
-                 label="Name" 
-                 value={name}
-                 onChange={handleChange}
+  return (
+    <div style={{ textAlign: "center" }}>
+      <h1>Login</h1>
+      <Formik
+        initialValues={{
+          email: "",
+          password: "",
+        }}
+        validationSchema={validationSchema}
+        onSubmit={async (values, actions) => {
+          try {
+            const { email, password } = values;
+            const config = {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            };
+            const res = await axios.post("/api/user", values);
+            console.log(res);
+            history.push("/");
+          } catch (e) {
+            console.log(e);
+          }
+          actions.resetForm();
+          //console.log("log submit");
+        }}
+      >
+        {(values, isSubmitting) => (
+          <Form className={classes.root}>
+            <MyTextField key="1" name="email" type="email" label="Email" />
+            <br />
+            <MyTextField
+              key="2"
+              name="password"
+              type="password"
+              label="Password "
             />
-            <br/>
-            <TextField
-                placeholder="email"
-                id="standard-basic"
-                 label="Email" 
-                 value={email}
-                 onChange={(event) => setEmail(event.target.value)}
-            />
-            <br/>
+            <br />
             <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.root.submit}
+              variant="contained"
+              fullWidth
+              color="primary"
+              disabled={isSubmitting}
+              type="submit"
             >
-                Sign In
+              Login
             </Button>
-            </form>
-            {userslist}           
-        </div>
-    )
-}
+          </Form>
+        )}
+      </Formik>
+      {userslist}
+    </div>
+  );
+};
 
 export default Login;
