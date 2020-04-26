@@ -74,13 +74,13 @@ const Register = () => {
               validationSchema={validationSchema}
               onSubmit={async (values, actions) => {
                 try {
-                  await axios.post("/api/users/", values);
+                  const res = await axios.post("/api/users/", values);
+                  console.log(res);
                   history.push("/");
                 } catch (e) {
                   console.log(e);
                 }
                 actions.resetForm();
-                console.log("registered");
               }}
             >
               {(values, isSubmitting) => (

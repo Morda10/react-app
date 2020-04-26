@@ -5,8 +5,12 @@ import Login from "./componnents/Login";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Register from "./componnents/Register";
 import HomePage from "./componnents/HomePage";
+import { useSelector, useDispatch } from "react-redux";
 
 const App = () => {
+  const counter = useSelector((state) => state.counter);
+  const dispatch = useDispatch();
+
   const routing = [
     { to: "/", name: "Home" },
     { to: "/Login", name: "Login" },
@@ -16,17 +20,13 @@ const App = () => {
   return (
     <Router>
       <Fragment>
-        {/* <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/about">About</Link>
-        </li>
-        <li>
-          <Link to="/dashboard">Dashboard</Link>
-        </li>
-      </ul> */}
+        {/* <h1>Counter: {counter} </h1>
+        <button onClick={() => dispatch({ type: "INCREMENT" })}>
+          INCREMENT
+        </button>
+        <button onClick={() => dispatch({ type: "DECREMENT" })}>
+          DECREMENT
+        </button> */}
         <Navbar routing={routing} />
         <Switch>
           <Route exact path="/" component={HomePage} />

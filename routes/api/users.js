@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
 const Yup = require("yup");
-
+const jwt = require("jsonwebtoken");
+const env = require("dotenv");
 const User = require("../../models/User");
+env.config();
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("First name is required"),
@@ -29,7 +31,8 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   // console.log(req.body);
-  const [email] = req.body.email;
+  const email = req.body.email;
+  const password = req.body.password;
   try {
     await validationSchema.validate(req.body, { abortEarly: false });
     let user = await User.findOne({ email });
@@ -41,12 +44,33 @@ router.post("/", async (req, res) => {
     const nuser = new User({
       name: req.body.name,
       //lastName: req.body.lastName,
-      email: req.body.email,
-      password: req.body.password,
+      email,
+      password,
     });
+
+    const salt = await bcrypt.genSalt(10);
+
+    nuser.password = await bcrypt.hash(password, salt);
+
     await nuser.save();
     console.log(nuser);
-    return res.status(200).json(nuser);
+
+    //need to send back jwt
+    const payload = {
+      user: {
+        id: nuser.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.SECRET_OR_KEY,
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
   } catch (error) {
     console.log(error);
   }

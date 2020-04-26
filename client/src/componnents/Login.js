@@ -60,6 +60,8 @@ const Login = () => {
     <div key={u._id}>
       <li>name: {u.name}</li>
       <li>email: {u.email}</li>
+      <li>password: {u.password}</li>
+      <br />
     </div>
   ));
 
