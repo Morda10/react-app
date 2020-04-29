@@ -1,14 +1,16 @@
+import { SET_USER } from "../types";
+
 const initialState = {
-  counter: 0,
+  user: null,
 };
 
 export const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "INCREMENT":
-      return { counter: state.counter + 1 };
-
-    case "DECREMENT":
-      return { counter: state.counter - 1 };
+    case SET_USER:
+      return {
+        ...state,
+        user: action.payload,
+      };
 
     default:
       return state;

@@ -32,13 +32,14 @@ router.post("/", async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        rank: user.rank,
       },
     };
 
     jwt.sign(
       payload,
       process.env.SECRET_OR_KEY,
-      { expiresIn: 360000 },
+      { expiresIn: 36000 },
       (err, token) => {
         if (err) throw err;
         res.json({ token });

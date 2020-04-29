@@ -49,6 +49,10 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  button: {
+    backgroundColor: "#202020",
+    color: "white",
+  },
 });
 
 const Register = () => {
@@ -56,7 +60,7 @@ const Register = () => {
   const classes = useStyles();
 
   return (
-    <Grid marginTop container justify="center">
+    <Grid container justify="center">
       <Grid item xs={6}>
         <Card className={classes.root}>
           <CardContent>
@@ -120,9 +124,9 @@ const Register = () => {
                   />
                   <br />
                   <Button
+                    className={classes.button}
                     variant="contained"
                     fullWidth
-                    color="primary"
                     disabled={isSubmitting}
                     type="submit"
                   >

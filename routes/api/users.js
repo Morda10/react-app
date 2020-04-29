@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const Yup = require("yup");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
+const auth = require("../../middleware/auth");
 const User = require("../../models/User");
 env.config();
 
@@ -20,7 +21,7 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Password doesnt match"),
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const users = await User.find();
     return res.status(200).json(users);
@@ -53,24 +54,8 @@ router.post("/", async (req, res) => {
     nuser.password = await bcrypt.hash(password, salt);
 
     await nuser.save();
-    console.log(nuser);
 
-    //need to send back jwt
-    const payload = {
-      user: {
-        id: nuser.id,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.SECRET_OR_KEY,
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
+    return res.status(200).json("erggreger");
   } catch (error) {
     console.log(error);
   }

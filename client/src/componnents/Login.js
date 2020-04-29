@@ -1,26 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  Formik,
-  Form,
-  // Field,
-  // ErrorMessage,
-  // withFormik,
-  // yupToFormErrors,
-} from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  //TextField,
-  Button,
-  // Checkbox,
-  // Radio,
-  // FormControlLabel,
-  // Select,
-  // MenuItem,
-} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import MyTextField from "./Input/Input";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../redux/actions/authActions";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Email not valid").required("Email is required"),
@@ -36,34 +23,21 @@ const useStyles = makeStyles((theme) => ({
       width: "25ch",
     },
   },
+  button: {
+    backgroundColor: "#202020",
+    color: "white",
+  },
 }));
 
 const Login = () => {
   const history = useHistory();
-  const [users, setUsers] = useState([]);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const classes = useStyles();
 
-  //take care of cleanup
-  useEffect(() => {
-    // async on useEffect like this
-    const fetchData = async () => {
-      const res = await axios.get("/api/users/");
-      setUsers(res.data);
-    };
-    fetchData();
-    return () => {
-      setUsers([]);
-    };
-  }, []);
-
-  const userslist = users.map((u) => (
-    <div key={u._id}>
-      <li>name: {u.name}</li>
-      <li>email: {u.email}</li>
-      <li>password: {u.password}</li>
-      <br />
-    </div>
-  ));
+  if (user) {
+    history.push("/");
+  }
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -76,20 +50,15 @@ const Login = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
           try {
-            const { email, password } = values;
-            const config = {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            };
             const res = await axios.post("/api/user", values);
-            console.log(res);
+            // console.log(res);
+            const token = res.data.token;
+            dispatch(setUser(token));
             history.push("/");
           } catch (e) {
             console.log(e);
           }
-          actions.resetForm();
-          //console.log("log submit");
+          // actions.resetForm();
         }}
       >
         {(values, isSubmitting) => (
@@ -104,9 +73,9 @@ const Login = () => {
             />
             <br />
             <Button
+              className={classes.button}
               variant="contained"
               fullWidth
-              color="primary"
               disabled={isSubmitting}
               type="submit"
             >
@@ -115,7 +84,6 @@ const Login = () => {
           </Form>
         )}
       </Formik>
-      {userslist}
     </div>
   );
 };
