@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import MyTextField from "./Input/Input";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -34,7 +34,10 @@ const Login = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [errors, setErrors] = useState(null);
+  // const [token, setToken] = useState("");
 
+  // const tem = () => dispatch(setUser(token));
   if (user) {
     history.push("/");
   }
@@ -49,16 +52,28 @@ const Login = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
-          try {
-            const res = await axios.post("/api/user", values);
-            // console.log(res);
-            const token = res.data.token;
+          const res = await axios.post("/api/user", values);
+          if (res) {
+            const { token } = res.data;
             dispatch(setUser(token));
             history.push("/");
-          } catch (e) {
-            console.log(e);
+          } else {
+            setErrors("Invalid email or Password");
           }
-          // actions.resetForm();
+
+          // try {
+          //   const res = await axios.post("/api/user", values);
+          //   // token = res.data.token;
+          //   const tempt = res.data.token;
+          //   console.log(tempt);
+          //   setToken("tempt");
+          //   console.log(token);
+          //   //tem();
+          //   history.push("/");
+          // } catch (e) {
+          //   setErrors(e.response.data.errors[0].msg);
+          //   actions.resetForm();
+          // }
         }}
       >
         {(values, isSubmitting) => (
@@ -84,6 +99,16 @@ const Login = () => {
           </Form>
         )}
       </Formik>
+      <Typography variant="h6" color="error">
+        {errors}
+      </Typography>
+      {/* <Button
+        onClick={() => {
+          setToken("dsggegg");
+        }}
+      >
+        gsgsggg
+      </Button> */}
     </div>
   );
 };

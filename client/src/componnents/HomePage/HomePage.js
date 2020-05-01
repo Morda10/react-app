@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { Fade, Button, Box, Hidden } from "@material-ui/core";
-import MyTextField from "../Input/Input";
-import axios from "axios";
-import { useHistory } from "react-router-dom";
+// import { Formik, Form } from "formik";
+// import * as Yup from "yup";
+import { Fade, Button, Box } from "@material-ui/core";
+// import MyTextField from "../Input/Input";
+// import axios from "axios";
+// import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import ImageGallery from "react-image-gallery";
+// import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
+import WorkoutHours from "./WorkoutHours";
+// import Calendars from "../../UI/MyCalendar";
 
 const useStyles = makeStyles((theme) => ({
   centerDiv: {
@@ -20,13 +22,12 @@ const useStyles = makeStyles((theme) => ({
   button: {
     transform: "translateY(10rem)",
     backgroundColor: "#202020",
-    transition: "all .3s ease",
+    transition: "all .2s ease",
     color: "white",
     opacity: 0.7,
     "&:hover": { opacity: 1, backgroundColor: "#202020" },
   },
   buttonClicked: {
-    backgroundColor: "#202020",
     color: "white",
     transform: "translateY(-5rem)",
     opacity: 0,
@@ -39,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": { opacity: 1, backgroundColor: "transparent" },
   },
   backIcon: {
-    color: "#202020",
     opacity: 0.6,
     "&:hover": { opacity: 1 },
   },
@@ -52,6 +52,7 @@ export const HomePage = () => {
   const [showButton, setShowButton] = useState(true);
   const classes = useStyles({ showButton });
   const [date, setDate] = useState(new Date());
+  let chosenDate = moment(date).format("DD-MM-YYYY");
 
   const toggleButton = () => {
     setShowButton(!showButton);
@@ -65,6 +66,7 @@ export const HomePage = () => {
     <div>
       <Box display="flex" justifyContent="center">
         <Button
+          color="primary"
           size="large"
           className={showButton ? classes.button : classes.buttonClicked}
           onClick={toggleButton}
@@ -73,6 +75,7 @@ export const HomePage = () => {
         </Button>
       </Box>
       <Button
+        color="primary"
         size="large"
         className={classes.backButton}
         variant="outlined"
@@ -87,7 +90,8 @@ export const HomePage = () => {
           <Calendar onChange={onChange} value={date} />
         </Box>
       </Fade>
-      {moment(date).format("DD/MM/YYYY")}
+      <br />
+      <WorkoutHours date={chosenDate} />
     </div>
   );
 };
@@ -108,8 +112,8 @@ export default HomePage;
 //     thumbnail: "https://picsum.photos/id/1019/250/150/",
 //   },
 // ];
-{
-  /* <Container>
+// {
+/* <Container>
       <ImageGallery items={images} />
     </Container> */
-}
+// }

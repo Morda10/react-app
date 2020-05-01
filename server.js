@@ -32,6 +32,7 @@ app.use(express.json());
 // Define Routes
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/user", require("./routes/api/user"));
+app.use("/api/workouts", require("./routes/api/workouts"));
 //app.use('/api/user', middleware, require('./routes/api/user'));
 
 // Serve static assets in production
