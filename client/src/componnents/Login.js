@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,7 +6,7 @@ import { Button, Typography } from "@material-ui/core";
 import MyTextField from "./Input/Input";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../redux/actions/authActions";
 
 const validationSchema = Yup.object().shape({
@@ -35,12 +35,19 @@ const Login = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [errors, setErrors] = useState(null);
-  // const [token, setToken] = useState("");
 
-  // const tem = () => dispatch(setUser(token));
-  if (user) {
+  const onSubmit = async (values) => {
+    const res = await axios.post("/api/user", values);
+    const { token } = res.data;
+    dispatch(setUser(token));
     history.push("/");
-  }
+  };
+
+  useEffect(() => {
+    if (user) {
+      history.push("/");
+    }
+  }, [user, history]);
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -52,28 +59,12 @@ const Login = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
-          const res = await axios.post("/api/user", values);
-          if (res) {
-            const { token } = res.data;
-            dispatch(setUser(token));
-            history.push("/");
-          } else {
-            setErrors("Invalid email or Password");
+          try {
+            await onSubmit(values, actions);
+          } catch (e) {
+            setErrors(e.response.data.errors[0].msg);
+            actions.resetForm();
           }
-
-          // try {
-          //   const res = await axios.post("/api/user", values);
-          //   // token = res.data.token;
-          //   const tempt = res.data.token;
-          //   console.log(tempt);
-          //   setToken("tempt");
-          //   console.log(token);
-          //   //tem();
-          //   history.push("/");
-          // } catch (e) {
-          //   setErrors(e.response.data.errors[0].msg);
-          //   actions.resetForm();
-          // }
         }}
       >
         {(values, isSubmitting) => (
