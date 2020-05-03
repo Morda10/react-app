@@ -1,21 +1,23 @@
-import React, { useState } from "react";
-// import { Formik, Form } from "formik";
-// import * as Yup from "yup";
-import { Fade, Button, Box } from "@material-ui/core";
-// import MyTextField from "../Input/Input";
-// import axios from "axios";
-// import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Fade, Button, Box, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-// import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
+// import "react-image-gallery/styles/css/image-gallery.css";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import moment from "moment";
-import WorkoutHours from "./WorkoutHours";
-// import Calendars from "../../UI/MyCalendar";
+import axios from "axios";
+import WorkoutsButtonList from "./WorkoutsButtonList";
+import MyCalendar from "./MyCalendar";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  buttons: {
+    opacity: "0.7",
+    "&:hover": { opacity: "1" },
+  },
   centerDiv: {
     textAlign: "center",
   },
@@ -49,18 +51,46 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const HomePage = () => {
-  const [showButton, setShowButton] = useState(true);
+  const [date, setdate] = useState(new Date());
+  const [showButton, setshowButton] = useState(true);
+  const [Dates, setDates] = useState([]);
+  const [workOutSaved, setworkOutSaved] = useState(false);
   const classes = useStyles({ showButton });
-  const [date, setDate] = useState(new Date());
-  let chosenDate = moment(date).format("DD-MM-YYYY");
+  const today = new Date();
+  const success = "Workout saved successfully";
 
   const toggleButton = () => {
-    setShowButton(!showButton);
+    setshowButton(!showButton);
   };
 
   const onChange = (date) => {
-    setDate(date);
+    setdate(date);
+    setworkOutSaved(false);
   };
+
+  useEffect(() => {
+    const today = new Date();
+    const formatted = moment(today).format("DD-MM-YYYY");
+    async function fetchData() {
+      const res = await axios.get(`/api/workouts/${formatted}`);
+      if (res.data.length !== 0) {
+        setDates(res.data);
+      }
+    }
+    try {
+      fetchData();
+    } catch (e) {
+      console.log(e);
+    }
+  }, [workOutSaved]);
+
+  useEffect(() => {
+    if (workOutSaved) {
+      setTimeout(() => {
+        setworkOutSaved(false);
+      }, 2000);
+    }
+  }, [workOutSaved]);
 
   return (
     <div>
@@ -87,11 +117,34 @@ export const HomePage = () => {
 
       <Fade in={!showButton} timeout={{ enter: 1000 }}>
         <Box display="flex" justifyContent="center">
-          <Calendar onChange={onChange} value={date} />
+          <MyCalendar date={date} today={today} onChange={onChange} />
         </Box>
       </Fade>
       <br />
-      <WorkoutHours date={chosenDate} />
+      <div className={classes.root}>
+        {workOutSaved ? (
+          <Typography variant="h6" color="primary">
+            {success}
+          </Typography>
+        ) : (
+          <Grid container spacing={2}>
+            <WorkoutsButtonList
+              Dates={Dates}
+              date={date}
+              setSaved={setworkOutSaved}
+              show={!showButton}
+            />
+          </Grid>
+        )}
+        {/* <Grid container spacing={2}>
+          <WorkoutsButtonList Dates={Dates} date={date} />
+        </Grid> */}
+      </div>
+      {/* <WorkoutHours
+        today={today}
+        twoWeeksFromNow={twoWeeksFromNow}
+        date={chosenDate}
+      /> */}
     </div>
   );
 };

@@ -38,13 +38,21 @@ export const WorkoutHours = (props) => {
     return res;
   };
 
+  const toggleSaved = () => {
+    setworkOutSaved(false);
+  };
+
+  useEffect(() => {
+    toggleSaved();
+  }, [date]);
+
   const allHours = hour_range(StartWork, LastWorkout);
   const avalibleHours = allHours.filter((h) => !s.includes(h));
-
+  // console.log(avalibleHours);
   //remember to add option to change type of workout
   const onClick = async (a) => {
     const newWorkout = moment.utc(date + " " + a, "DD-MM-YYYY HH:mm").format();
-    // console.log(newWorkout);
+    // console.log(date);
     try {
       const res = await axios.post("/api/workouts/", { date: newWorkout });
       console.log(res.data);
@@ -73,6 +81,7 @@ export const WorkoutHours = (props) => {
     const fetch = async () => {
       try {
         const res = await axios.get(`/api/workouts/${date}`);
+        // console.log(res.data);
         if (res) {
           const arr = [];
           res.data.map((r) => {
@@ -80,11 +89,7 @@ export const WorkoutHours = (props) => {
             arr.push(hour);
             return true;
           });
-          //   const workoutsHours = arr.map((a) => (
-          //     <Button className={classes.buttons} key={a}>
-          //       {a}
-          //     </Button>
-          //   ));
+          // console.log(arr);
           setS(arr);
         }
       } catch (e) {

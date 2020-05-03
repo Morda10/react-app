@@ -8,6 +8,9 @@ const WorkoutSchema = new Schema({
     required: true,
     unique: true,
   },
+  hours: {
+    type: [String],
+  },
   type: {
     type: Number,
     default: 1,
