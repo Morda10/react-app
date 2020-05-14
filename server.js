@@ -3,31 +3,31 @@ dotenv.config();
 const express = require("express");
 const connectDB = require("./config/db");
 const path = require("path");
-const middleware = require("./middleware/auth");
+// const middleware = require("./middleware/auth");
 const app = express();
 
-const passport = require("passport");
-const passportJWT = require("passport-jwt");
-const JwtStrategy = passportJWT.Strategy;
-const ExractJwt = passportJWT.ExtractJwt;
+// const passport = require("passport");
+// const passportJWT = require("passport-jwt");
+// const JwtStrategy = passportJWT.Strategy;
+// const ExractJwt = passportJWT.ExtractJwt;
 
-const opts = {
-  jwtFromRequest: ExractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET_OR_KEY,
-};
+// const opts = {
+//   jwtFromRequest: ExractJwt.fromAuthHeaderAsBearerToken(),
+//   secretOrKey: process.env.SECRET_OR_KEY,
+// };
 
-const strategy = new JwtStrategy(opts, (payload, next) => {
-  const user = null;
-  next(null, user);
-});
-passport.use(strategy);
-app.use(passport.initialize());
+// const strategy = new JwtStrategy(opts, (payload, next) => {
+//   const user = null;
+//   next(null, user);
+// });
+// passport.use(strategy);
+// app.use(passport.initialize());
 
 // Connect Database
 connectDB();
 
 // Init Middleware
-app.use(express.json());
+app.use(express.json({ extended: false }));
 
 // Define Routes
 app.use("/api/users", require("./routes/api/users"));
