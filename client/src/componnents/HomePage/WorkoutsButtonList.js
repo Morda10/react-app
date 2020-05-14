@@ -59,7 +59,7 @@ export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
       <Grid container spacing={2}>
         {show
           ? hours.map((a) => (
-              <Grid key={a} item md={1} sm={2} xs={3}>
+              <Grid key={a} item md={2} sm="auto" xs="auto">
                 <Button
                   color="primary"
                   className={classes.buttons}

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Fade, Button, Box, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-// import "react-image-gallery/styles/css/image-gallery.css";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import moment from "moment";
 import axios from "axios";
 import WorkoutsButtonList from "./WorkoutsButtonList";
 import MyCalendar from "./MyCalendar";
+// import "react-image-gallery/styles/css/image-gallery.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -127,24 +127,20 @@ export const HomePage = () => {
             {success}
           </Typography>
         ) : (
-          <Grid container spacing={2}>
-            <WorkoutsButtonList
-              Dates={Dates}
-              date={date}
-              setSaved={setworkOutSaved}
-              show={!showButton}
-            />
-          </Grid>
+          <Fade in={!showButton} timeout={{ enter: 1000 }}>
+            {/* <Grid container spacing={2}> */}
+            <Box display="flex" justifyContent="center">
+              <WorkoutsButtonList
+                Dates={Dates}
+                date={date}
+                setSaved={setworkOutSaved}
+                show={!showButton}
+              />
+            </Box>
+            {/* </Grid> */}
+          </Fade>
         )}
-        {/* <Grid container spacing={2}>
-          <WorkoutsButtonList Dates={Dates} date={date} />
-        </Grid> */}
       </div>
-      {/* <WorkoutHours
-        today={today}
-        twoWeeksFromNow={twoWeeksFromNow}
-        date={chosenDate}
-      /> */}
     </div>
   );
 };
