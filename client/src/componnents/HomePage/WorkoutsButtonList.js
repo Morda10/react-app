@@ -42,12 +42,12 @@ export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
   };
 
   useEffect(() => {
-    console.log("ehehhehehhehe");
     Dates.forEach((d) => {
       if (
         moment(date).format("DD-MM-YYYY") ===
         moment(d.date).format("DD-MM-YYYY")
       ) {
+        console.log("ehehhehehhehe");
         sethours(d.hours);
         return;
       }
