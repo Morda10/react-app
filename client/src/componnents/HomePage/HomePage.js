@@ -75,6 +75,7 @@ export const HomePage = () => {
     const formatted = moment(today).format("DD-MM-YYYY");
     async function fetchData() {
       const res = await axios.get(`/api/workouts/${formatted}`);
+      console.log(formatted, res.data);
       if (res.data.length !== 0) {
         setDates(res.data);
       }
