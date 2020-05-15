@@ -16,7 +16,7 @@ const validationSchema = Yup.object().shape({
 
 //get workouts by date
 router.get("/:date", async (req, res) => {
-  const today = moment.utc(new Date().setHours(3, 0, 0)).format();
+  const today = moment.utc(new Date().setHours(0, 0, 0)).format();
   // today.setHours(3, 0, 0);
   // console.log(today);
   const StartWork = 10;
