@@ -37,7 +37,9 @@ const useStyles = makeStyles((theme) => ({
     transition: "all .6s ease",
   },
   backButton: {
+    marginTop: 0,
     marginLeft: "1rem",
+    marginBottom: "1rem",
     backgroundColor: "transparent",
     "&:hover": { opacity: 1, backgroundColor: "transparent" },
   },

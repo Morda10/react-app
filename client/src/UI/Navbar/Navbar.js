@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     backgroundColor: "#202020",
-    marginBottom: "3rem",
   },
   menuButton: {
     marginRight: theme.spacing(2),

@@ -47,7 +47,8 @@ export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
         moment(date).format("DD-MM-YYYY") ===
         moment(d.date).format("DD-MM-YYYY")
       ) {
-        console.log("ehehhehehhehe");
+        console.log(date, d.date);
+        //date = hour + 3:00, d.date = hour usual problem on production
         sethours(d.hours);
         return;
       }
