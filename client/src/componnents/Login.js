@@ -55,7 +55,7 @@ const Login = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
           try {
-            const res = await axios.post("/api/user", values);
+            const res = await axios.post("/api/user/", values);
             const { token } = res.data;
             dispatch(setUser(token));
             history.push("/");

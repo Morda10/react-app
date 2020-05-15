@@ -26,7 +26,10 @@ router.get("/:date", async (req, res) => {
   try {
     // console.log(req.params.date);
     const date1 = moment(req.params.date, "DD-MM-YYYY").format();
-    const date2 = moment(date1).add(2, "weeks").add(1, "days").format();
+    const date2 = moment(date1)
+      .add(2, "weeks")
+      .add(1, "days")
+      .format();
     // console.log(date2);
     const workouts = await Workouts.find({
       date: { $gt: date1, $lte: date2 },
@@ -77,7 +80,10 @@ router.get("/:date", async (req, res) => {
 //remember to add auth
 //add workouts by date and hour
 router.post("/", async (req, res) => {
-  const date = moment.utc(req.body.date).add(3, "hours").format();
+  const date = moment
+    .utc(req.body.date)
+    .add(3, "hours")
+    .format();
   const hour = req.body.hours;
   const type = req.body.type ? req.body.type : 1;
   // console.log(date);
@@ -90,9 +96,7 @@ router.post("/", async (req, res) => {
         workouts.hours.push(hour[0]);
         await workouts.save();
       } else {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "This hour on this day already taken" }] });
+        return res.status(200).json("This hour on this day already taken");
       }
     } else {
       const workout = new Workouts({

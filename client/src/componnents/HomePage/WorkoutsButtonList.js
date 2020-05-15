@@ -42,6 +42,7 @@ export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
   };
 
   useEffect(() => {
+    console.log("ehehhehehhehe");
     Dates.forEach((d) => {
       if (
         moment(date).format("DD-MM-YYYY") ===
