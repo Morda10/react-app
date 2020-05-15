@@ -10,7 +10,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../redux/actions/authActions";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Email not valid").required("Email is required"),
+  email: Yup.string()
+    .email("Email not valid")
+    .required("Email is required"),
   password: Yup.string()
     .min(5, "Password must be 5 characters or longer")
     .required("password is required"),
@@ -36,13 +38,6 @@ const Login = () => {
   const classes = useStyles();
   const [errors, setErrors] = useState(null);
 
-  const onSubmit = async (values) => {
-    const res = await axios.post("/api/user", values);
-    const { token } = res.data;
-    dispatch(setUser(token));
-    history.push("/");
-  };
-
   useEffect(() => {
     if (user) {
       history.push("/");
@@ -51,7 +46,7 @@ const Login = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Login</h1>
+      <h1>Login1</h1>
       <Formik
         initialValues={{
           email: "",
@@ -60,7 +55,10 @@ const Login = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
           try {
-            await onSubmit(values, actions);
+            const res = await axios.post("/api/user", values);
+            const { token } = res.data;
+            dispatch(setUser(token));
+            history.push("/");
           } catch (e) {
             setErrors(e.response.data.errors[0].msg);
             actions.resetForm();
