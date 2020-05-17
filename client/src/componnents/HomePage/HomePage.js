@@ -6,6 +6,7 @@ import moment from "moment";
 import axios from "axios";
 import WorkoutsButtonList from "./WorkoutsButtonList";
 import MyCalendar from "./MyCalendar";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,10 +14,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
-  buttons: {
-    opacity: "1",
-    "&:hover": { opacity: "0.7" },
-  },
+
   centerDiv: {
     textAlign: "center",
   },
@@ -128,12 +126,9 @@ export const HomePage = () => {
       <br />
       <div className={classes.root}>
         {workOutSaved ? (
-          <Typography variant="h6" color="primary">
-            {success}
-          </Typography>
+          <DoneAllIcon color="primary" fontSize="large" />
         ) : (
           <Fade in={!showButton} timeout={{ enter: 1000 }}>
-            {/* <Grid container spacing={2}> */}
             <Box display="flex" justifyContent="center">
               <WorkoutsButtonList
                 Dates={Dates}
@@ -142,7 +137,6 @@ export const HomePage = () => {
                 show={!showButton}
               />
             </Box>
-            {/* </Grid> */}
           </Fade>
         )}
       </div>

@@ -57,7 +57,7 @@ export const MyCalendar = ({ date, today, onChange }) => {
         jalali={false}
         numberOfMonths={1}
         numberOfSelectableDays={1}
-        disabledDays={["2020-06-01"]}
+        // disabledDays={["2020-06-01"]}
         responsive={handleResponsive}
         disabledBeforToday={true}
         disabled={false}
