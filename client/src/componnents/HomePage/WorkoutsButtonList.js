@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import axios from "axios";
+import "./HomePage.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-  },
-  buttons: {
-    opacity: "1",
-    "&:hover": { opacity: "0.7" },
   },
 }));
 
@@ -36,28 +33,40 @@ export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
       console.log(e.response.data.errors[0].msg);
     }
   };
+  let gridref;
+  const scrollToBottom = () => {
+    gridref.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
+    let found = false;
     Dates.forEach((d) => {
       if (
         moment(date).format("DD-MM-YYYY") ===
         moment(d.date).format("DD-MM-YYYY")
       ) {
+        scrollToBottom();
+        found = true;
         sethours(d.hours);
         return;
       }
     });
+    if (!found) sethours([]);
   }, [date, Dates]);
 
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      ref={(el) => {
+        gridref = el;
+      }}
+    >
       <Grid container spacing={2}>
         {show
           ? hours.map((a) => (
               <Grid key={a} item md={2} sm="auto" xs="auto">
                 <Button
-                  color="primary"
-                  className={classes.buttons}
+                  className="hours"
                   fullWidth
                   variant="contained"
                   onClick={() => onClick(a)}

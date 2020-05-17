@@ -7,6 +7,7 @@ import axios from "axios";
 import WorkoutsButtonList from "./WorkoutsButtonList";
 import MyCalendar from "./MyCalendar";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
+import "./HomePage.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,7 +57,7 @@ export const HomePage = () => {
   const [workOutSaved, setworkOutSaved] = useState(false);
   const classes = useStyles({ showButton });
   const today = new Date();
-  const success = "Workout saved successfully";
+  // const success = "Workout saved successfully";
 
   const toggleButton = () => {
     setshowButton(!showButton);
@@ -126,8 +127,11 @@ export const HomePage = () => {
       <br />
       <div className={classes.root}>
         {workOutSaved ? (
-          <DoneAllIcon color="primary" fontSize="large" />
+          <h1 className="title">
+            <DoneAllIcon color="primary" fontSize="large" />
+          </h1>
         ) : (
+          // <h1 className="title">Animating gradients</h1>
           <Fade in={!showButton} timeout={{ enter: 1000 }}>
             <Box display="flex" justifyContent="center">
               <WorkoutsButtonList

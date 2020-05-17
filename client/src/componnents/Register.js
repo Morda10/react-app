@@ -1,26 +1,7 @@
 import React from "react";
-import {
-  Formik,
-  Form,
-  // Field,
-  // ErrorMessage,
-  // withFormik,
-  // yupToFormErrors,
-} from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import {
-  //   TextField,
-  Card,
-  CardContent,
-  Button,
-  Grid,
-  Typography,
-  //   Checkbox,
-  //   Radio,
-  //   FormControlLabel,
-  //   Select,
-  //   MenuItem,
-} from "@material-ui/core";
+import { Card, CardContent, Button, Grid, Typography } from "@material-ui/core";
 import MyTextField from "./Input/Input";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -29,7 +10,9 @@ import { makeStyles } from "@material-ui/core/styles";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Last name is required"),
-  email: Yup.string().email("Email not valid").required("Email is required"),
+  email: Yup.string()
+    .email("Email not valid")
+    .required("Email is required"),
   password: Yup.string()
     .min(5, "Password must be 5 characters or longer")
     .required("password is required"),
@@ -41,13 +24,10 @@ const validationSchema = Yup.object().shape({
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 200,
+    marginTop: "2rem",
   },
   title: {
     fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
   },
   button: {
     backgroundColor: "#202020",
@@ -61,7 +41,7 @@ const Register = () => {
 
   return (
     <Grid container justify="center">
-      <Grid item xs={6}>
+      <Grid item xs={10}>
         <Card className={classes.root}>
           <CardContent>
             <Typography align="center" variant="h3">

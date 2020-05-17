@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Typography } from "@material-ui/core";
+import { Button, Typography, Grid, Card, CardContent } from "@material-ui/core";
 import MyTextField from "./Input/Input";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -20,10 +20,7 @@ const validationSchema = Yup.object().shape({
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "25ch",
-    },
+    marginTop: "2rem",
   },
   button: {
     backgroundColor: "#202020",
@@ -45,60 +42,66 @@ const Login = () => {
   }, [user, history]);
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1>Login</h1>
-      <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        validationSchema={validationSchema}
-        onSubmit={async (values, actions) => {
-          try {
-            const res = await axios.post("/api/user/", values);
-            const { token } = res.data;
-            dispatch(setUser(token));
-            history.push("/");
-          } catch (e) {
-            setErrors(e.response.data.errors[0].msg);
-            actions.resetForm();
-          }
-        }}
-      >
-        {(values, isSubmitting) => (
-          <Form className={classes.root}>
-            <MyTextField key="1" name="email" type="email" label="Email" />
-            <br />
-            <MyTextField
-              key="2"
-              name="password"
-              type="password"
-              label="Password "
-            />
-            <br />
-            <Button
-              className={classes.button}
-              variant="contained"
-              fullWidth
-              disabled={isSubmitting}
-              type="submit"
-            >
+    <Grid container justify="center">
+      <Grid item xs={10}>
+        <Card className={classes.root}>
+          <CardContent>
+            <Typography align="center" variant="h3">
               Login
-            </Button>
-          </Form>
-        )}
-      </Formik>
-      <Typography variant="h6" color="error">
-        {errors}
-      </Typography>
-      {/* <Button
-        onClick={() => {
-          setToken("dsggegg");
-        }}
-      >
-        gsgsggg
-      </Button> */}
-    </div>
+            </Typography>
+            <Formik
+              initialValues={{
+                email: "",
+                password: "",
+              }}
+              validationSchema={validationSchema}
+              onSubmit={async (values, actions) => {
+                try {
+                  const res = await axios.post("/api/user/", values);
+                  const { token } = res.data;
+                  dispatch(setUser(token));
+                  history.push("/");
+                } catch (e) {
+                  setErrors(e.response.data.errors[0].msg);
+                  actions.resetForm();
+                }
+              }}
+            >
+              {(values, isSubmitting) => (
+                <Form>
+                  <MyTextField
+                    key="1"
+                    name="email"
+                    type="email"
+                    label="Email"
+                  />
+                  <br />
+                  <MyTextField
+                    key="2"
+                    name="password"
+                    type="password"
+                    label="Password "
+                  />
+                  <br />
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    fullWidth
+                    disabled={isSubmitting}
+                    type="submit"
+                  >
+                    Login
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+            <Typography variant="h6" color="error">
+              {errors}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };
 

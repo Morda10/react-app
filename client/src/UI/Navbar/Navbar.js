@@ -14,9 +14,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  toolbar: {
-    backgroundColor: "#202020",
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -42,7 +39,7 @@ const Navbar = (props) => {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.toolbar} position="static">
+      <AppBar position="static">
         <Toolbar>
           <IconButton
             edge="start"
