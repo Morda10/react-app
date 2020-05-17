@@ -6,7 +6,6 @@ import moment from "moment";
 import axios from "axios";
 import WorkoutsButtonList from "./WorkoutsButtonList";
 import MyCalendar from "./MyCalendar";
-// import "react-image-gallery/styles/css/image-gallery.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   buttons: {
-    opacity: "0.7",
-    "&:hover": { opacity: "1" },
+    opacity: "1",
+    "&:hover": { opacity: "0.7" },
   },
   centerDiv: {
     textAlign: "center",
@@ -26,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#202020",
     transition: "all .2s ease",
     color: "white",
-    opacity: 0.7,
-    "&:hover": { opacity: 1, backgroundColor: "#202020" },
+    opacity: 1,
+    "&:hover": { opacity: 0.7, backgroundColor: "#202020" },
   },
   buttonClicked: {
     color: "white",
@@ -66,8 +65,12 @@ export const HomePage = () => {
   };
 
   const onChange = (date) => {
-    setdate(date);
-    setworkOutSaved(false);
+    // console.log(date);
+    if (typeof date.format === "function") {
+      setdate(date.format());
+      console.log(date.format());
+      setworkOutSaved(false);
+    }
   };
 
   useEffect(() => {
@@ -75,7 +78,6 @@ export const HomePage = () => {
     const formatted = moment(today).format("DD-MM-YYYY");
     async function fetchData() {
       const res = await axios.get(`/api/workouts/${formatted}`);
-      console.log(formatted, res.data);
       if (res.data.length !== 0) {
         setDates(res.data);
       }
@@ -110,7 +112,7 @@ export const HomePage = () => {
       <Button
         color="primary"
         size="large"
-        className={classes.backButton}
+        className={showButton ? classes.vanish : classes.backButton}
         variant="outlined"
         onClick={toggleButton}
         disableRipple

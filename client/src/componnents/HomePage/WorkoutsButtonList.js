@@ -11,18 +11,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   buttons: {
-    opacity: "0.7",
-    "&:hover": { opacity: "1" },
+    opacity: "1",
+    "&:hover": { opacity: "0.7" },
   },
 }));
 
 export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
-  //   const [workoutHours, setWorkoutHours] = useState([]);
   const [hours, sethours] = useState([]);
   const classes = useStyles();
-  // const [workOutSaved, setworkOutSaved] = useState(false);
-  //   const [workoutHours, setworkoutHours] = useState([])
-  //   const success = "Workout saved successfully";
 
   const onClick = async (a) => {
     // console.log(a);
@@ -47,15 +43,11 @@ export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
         moment(date).format("DD-MM-YYYY") ===
         moment(d.date).format("DD-MM-YYYY")
       ) {
-        console.log(date, d.date);
-        console.log(d.hours);
-        //date = hour + 3:00, d.date = hour usual problem on production
         sethours(d.hours);
         return;
       }
     });
   }, [date, Dates]);
-  //   console.log(hours);
 
   return (
     <div className={classes.root}>

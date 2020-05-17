@@ -46,7 +46,7 @@ const Login = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Login1</h1>
+      <h1>Login</h1>
       <Formik
         initialValues={{
           email: "",
