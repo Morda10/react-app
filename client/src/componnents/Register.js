@@ -41,7 +41,7 @@ const Register = () => {
 
   return (
     <Grid container justify="center">
-      <Grid item xs={10}>
+      <Grid item xs={10} sm={8} lg={6}>
         <Card className={classes.root}>
           <CardContent>
             <Typography align="center" variant="h3">

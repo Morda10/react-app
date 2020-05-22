@@ -17,38 +17,29 @@ const validationSchema = Yup.object().shape({
 //get workouts by date
 router.get("/:date", async (req, res) => {
   const today = moment.utc(new Date().setHours(3, 0, 0)).format();
-  // today.setHours(3, 0, 0);
-  // console.log(today);
   const StartWork = 10;
   const LastWorkout = 22;
   const twoWeeksArr = twoWeeksArrayMaker(today, StartWork, LastWorkout);
-  // console.log(twoWeeksArr);
   try {
-    // console.log(req.params.date);
     const date1 = moment(req.params.date, "DD-MM-YYYY").format();
     const date2 = moment(date1)
       .add(2, "weeks")
       .add(1, "days")
       .format();
-    // console.log(date2);
     const workouts = await Workouts.find({
       date: { $gte: date1, $lte: date2 },
     });
-    // console.log(workouts);
     if (workouts.length !== 0) {
       workouts.map((o) => {
         twoWeeksArr.forEach((t) => {
           const tdate = moment(t.date).format("DD-MM-YYYY");
           const odate = moment(o.date).format("DD-MM-YYYY");
           if (tdate === odate) {
-            // console.log(tdate, odate);
             t.hours = t.hours.filter((h) => !o.hours.includes(h));
           }
         });
-        // return true;
       });
     }
-    // console.log(twoWeeksArr);
     return res.status(200).json(twoWeeksArr);
   } catch (e) {
     console.log(e);

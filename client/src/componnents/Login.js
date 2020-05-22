@@ -43,7 +43,7 @@ const Login = () => {
 
   return (
     <Grid container justify="center">
-      <Grid item xs={10}>
+      <Grid item xs={10} sm={8} lg={6} xl={4}>
         <Card className={classes.root}>
           <CardContent>
             <Typography align="center" variant="h3">

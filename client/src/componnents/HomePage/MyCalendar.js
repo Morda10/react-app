@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import { DatePicker, theme } from "react-trip-date";
 import { ThemeProvider } from "styled-components";
+import { Grid } from "@material-ui/core";
 
 const handleResponsive = (setNumberOfMonth) => {
   let width = document.querySelector(".tp-calendar").clientWidth;
@@ -32,7 +33,7 @@ export const MyCalendar = ({ date, today, onChange }) => {
       <>
         <p
           style={{
-            fontSize: "1.5rem",
+            // fontSize: "1.5rem",
             padding: 5,
           }}
           onClick={() => {
@@ -50,20 +51,24 @@ export const MyCalendar = ({ date, today, onChange }) => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <DatePicker
-        handleChange={onChange}
-        selectedDays={[moment(date).format("YYYY-MM-DD")]}
-        jalali={false}
-        numberOfMonths={1}
-        numberOfSelectableDays={1}
-        // disabledDays={["2020-06-01"]}
-        responsive={handleResponsive}
-        disabledBeforToday={true}
-        disabled={false}
-        dayComponent={Day}
-      />
-    </ThemeProvider>
+    <Grid container justify="center">
+      <Grid item xs={8} sm={6}>
+        <ThemeProvider theme={theme}>
+          <DatePicker
+            handleChange={onChange}
+            selectedDays={[moment(date).format("YYYY-MM-DD")]}
+            jalali={false}
+            numberOfMonths={1}
+            numberOfSelectableDays={1}
+            // disabledDays={["2020-06-01"]}
+            responsive={handleResponsive}
+            disabledBeforToday={true}
+            disabled={false}
+            dayComponent={Day}
+          />
+        </ThemeProvider>
+      </Grid>
+    </Grid>
   );
 };
 

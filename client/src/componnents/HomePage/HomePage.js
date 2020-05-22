@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Fade, Button, Box, Typography } from "@material-ui/core";
+import { Fade, Button, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import moment from "moment";
@@ -7,7 +7,6 @@ import axios from "axios";
 import WorkoutsButtonList from "./WorkoutsButtonList";
 import MyCalendar from "./MyCalendar";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
-import "./HomePage.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +56,6 @@ export const HomePage = () => {
   const [workOutSaved, setworkOutSaved] = useState(false);
   const classes = useStyles({ showButton });
   const today = new Date();
-  // const success = "Workout saved successfully";
 
   const toggleButton = () => {
     setshowButton(!showButton);
