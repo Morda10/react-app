@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  appbar: {
+    zIndex: theme.zIndex.modal + 1,
+  },
 }));
 
 const Navbar = (props) => {
@@ -33,14 +36,16 @@ const Navbar = (props) => {
       style={{ textDecoration: "none", color: "currentColor" }}
       key={r.name}
     >
-      <Button color="inherit">{r.name}</Button>
+      <Button className={classes.buttons} color="inherit">
+        {r.name}
+      </Button>
     </Link>
   ));
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar position="fixed" className={classes.appbar}>
+        <Toolbar disableGutters>
           <IconButton
             edge="start"
             className={classes.menuButton}

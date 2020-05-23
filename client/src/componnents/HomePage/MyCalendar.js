@@ -33,7 +33,7 @@ export const MyCalendar = ({ date, today, onChange }) => {
       <>
         <p
           style={{
-            // fontSize: "1.5rem",
+            fontSize: "1rem",
             padding: 5,
           }}
           onClick={() => {
@@ -52,7 +52,7 @@ export const MyCalendar = ({ date, today, onChange }) => {
 
   return (
     <Grid container justify="center">
-      <Grid item xs={8} sm={6}>
+      <Grid item xs={11} sm={6}>
         <ThemeProvider theme={theme}>
           <DatePicker
             handleChange={onChange}

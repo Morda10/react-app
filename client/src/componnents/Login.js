@@ -42,7 +42,7 @@ const Login = () => {
   }, [user, history]);
 
   return (
-    <Grid container justify="center">
+    <Grid container justify="center" style={{ marginTop: "3em" }}>
       <Grid item xs={10} sm={8} lg={6} xl={4}>
         <Card className={classes.root}>
           <CardContent>
@@ -57,7 +57,7 @@ const Login = () => {
               validationSchema={validationSchema}
               onSubmit={async (values, actions) => {
                 try {
-                  const res = await axios.post("/api/user/", values);
+                  const res = await axios.post("/api/login/", values);
                   const { token } = res.data;
                   dispatch(setUser(token));
                   history.push("/");

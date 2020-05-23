@@ -67,6 +67,7 @@ export const HomePage = () => {
       setdate(date.format());
       console.log(date.format());
       setworkOutSaved(false);
+    } else {
     }
   };
 
@@ -95,7 +96,7 @@ export const HomePage = () => {
   }, [workOutSaved]);
 
   return (
-    <div>
+    <div style={{ marginTop: "3em" }}>
       <Box display="flex" justifyContent="center">
         <Button
           color="primary"
@@ -126,7 +127,11 @@ export const HomePage = () => {
       <div className={classes.root}>
         {workOutSaved ? (
           <h1 className="title">
-            <DoneAllIcon color="primary" fontSize="large" />
+            <DoneAllIcon
+              color="primary"
+              fontSize="large"
+              style={{ position: "relative" }}
+            />
           </h1>
         ) : (
           // <h1 className="title">Animating gradients</h1>

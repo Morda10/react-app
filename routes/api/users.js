@@ -9,9 +9,10 @@ const User = require("../../models/User");
 env.config();
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required("First name is required"),
-  lastName: Yup.string().required("Last name is required"),
-  email: Yup.string().email("Email not valid").required("Email is required"),
+  name: Yup.string().required("name is required"),
+  email: Yup.string()
+    .email("Email not valid")
+    .required("Email is required"),
   password: Yup.string()
     .min(5, "Password must be 5 characters or longer")
     .required("password is required"),
@@ -19,8 +20,10 @@ const validationSchema = Yup.object().shape({
     .min(5, "Password must be 5 characters or longer")
     .required("Enter password again")
     .oneOf([Yup.ref("password"), null], "Password doesnt match"),
+  trainer: Yup.string().required("Must have someone to train you"),
 });
 
+//get all users
 router.get("/", auth, async (req, res) => {
   try {
     const users = await User.find();
@@ -30,32 +33,42 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+//register new trainee
 router.post("/", async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
+  const trainerID = req.body.trainer._id;
   try {
     await validationSchema.validate(req.body, { abortEarly: false });
     let user = await User.findOne({ email });
-
+    let trainer = await User.findById(trainerID);
+    if (!trainer) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Trainer doesnt exists" }] });
+    }
     if (user) {
       return res.status(400).json({ errors: [{ msg: "User already exists" }] });
     }
 
-    const nuser = new User({
+    const newUser = new User({
       name: req.body.name,
-      //lastName: req.body.lastName,
       email,
       password,
+      trainer: trainerID,
     });
+
+    trainer.trainees.push(newUser._id);
 
     const salt = await bcrypt.genSalt(10);
 
-    nuser.password = await bcrypt.hash(password, salt);
+    // console.log(newUser);
+    newUser.password = await bcrypt.hash(password, salt);
 
-    await nuser.save();
-
-    return res.status(200).json("erggreger");
+    await newUser.save();
+    await trainer.save();
+    return res.status(200).json("user added successfully");
   } catch (error) {
     console.log(error);
   }

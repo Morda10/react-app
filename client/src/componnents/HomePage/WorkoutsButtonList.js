@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import WorkoutsScheduled from "./WorkoutsScheduled";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,14 +33,17 @@ export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
   const [hours, sethours] = useState([]);
   const classes = useStyles();
   const [errors, setErrors] = useState(null);
-
+  const userObj = useSelector((state) => state.user);
+  const userID = userObj.user.id;
   const onClick = async (a) => {
+    // window.scrollTo(0, document.body.scrollHeight);
     const newWorkout = new Date(moment(date).format("MM-DD-YYYY"));
     console.log(newWorkout);
     try {
       const res = await axios.post("/api/workouts/", {
         date: newWorkout,
         hours: [a],
+        userID: userID,
       });
       console.log(res.data);
       setSaved(true);
@@ -69,33 +74,36 @@ export const WorkoutsButtonList = ({ Dates, date, setSaved, show }) => {
   }, [date, Dates]);
 
   return (
-    <Grid container justify="center">
-      <Grid
-        item
-        className={classes.root}
-        ref={(el) => {
-          gridref = el;
-        }}
-        xs={10}
-        sm={12}
-        md={12}
-      >
-        {show
-          ? hours.map((a) => (
-              <Button
-                key={a}
-                className={classes.buttons}
-                variant="contained"
-                size="small"
-                onClick={() => onClick(a)}
-              >
-                {a}
-              </Button>
-            ))
-          : null}
-        {errors}
+    <>
+      <Grid container justify="center">
+        <Grid
+          item
+          className={classes.root}
+          ref={(el) => {
+            gridref = el;
+          }}
+          xs={10}
+          sm={12}
+          md={12}
+        >
+          {show
+            ? hours.map((a) => (
+                <Button
+                  key={a}
+                  className={classes.buttons}
+                  variant="contained"
+                  size="small"
+                  onClick={() => onClick(a)}
+                >
+                  {a}
+                </Button>
+              ))
+            : null}
+          {errors}
+        </Grid>
       </Grid>
-    </Grid>
+      <WorkoutsScheduled userID={userID} />
+    </>
   );
 };
 
@@ -126,8 +134,7 @@ export default WorkoutsButtonList;
 // {/* </Grid> */}
 // </div>
 
-{
-  /* <div
+/* <div
       className={classes.root}
       ref={(el) => {
         gridref = el;
@@ -150,4 +157,3 @@ export default WorkoutsButtonList;
     </div>
   );
 }; */
-}
