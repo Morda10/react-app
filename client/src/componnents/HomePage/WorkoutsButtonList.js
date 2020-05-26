@@ -84,6 +84,7 @@ export const WorkoutsButtonList = ({
           ? hours.map((a) => (
               <Button
                 key={a}
+                fullWidth
                 className={classes.buttons}
                 variant="contained"
                 size="small"
