@@ -6,6 +6,9 @@ import {
   CardActions,
   Button,
   Box,
+  Container,
+  Grid,
+  useMediaQuery,
 } from "@material-ui/core";
 import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -14,7 +17,8 @@ import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: 275,
+    overflowX: "auto",
+    whiteSpace: "nowrap",
   },
   bullet: {
     display: "inline-block",
@@ -32,11 +36,17 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     color: "red",
   },
+  card: {
+    justifyContent: "center",
+    width: "100%",
+    // width: (p) => (p.matches ? "100%" : "auto"),
+  },
 }));
 
-export const WorkoutsScheduled = ({ userID }) => {
+export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
   const [scheduled, setscheduled] = useState([]);
-  const classes = useStyles();
+  const matches = useMediaQuery("(min-width:600px)");
+  const classes = useStyles({ matches });
   const bull = <span className={classes.bullet}>•</span>;
 
   const convertType = (type) => {
@@ -51,10 +61,14 @@ export const WorkoutsScheduled = ({ userID }) => {
       if (res.data.length !== 0) {
         console.log(res.data);
         setscheduled(res.data);
+        setDeleted(false);
+      } else {
+        setscheduled([]);
+        setDeleted(false);
       }
     }
     fetch();
-  }, []);
+  }, [deleted]);
 
   const onClick = async (workoutID, workoutDate, hour) => {
     try {
@@ -65,6 +79,7 @@ export const WorkoutsScheduled = ({ userID }) => {
         hour,
       });
       console.log(res.data);
+      setDeleted(true);
     } catch (e) {
       console.log(e.response.data.errors[0].msg);
     }
@@ -75,40 +90,55 @@ export const WorkoutsScheduled = ({ userID }) => {
   };
 
   return (
-    <>
-      <Typography
-        color="primary"
-        variant="h6"
-        style={{ position: "absolute", left: 0, width: "100%" }}
-      >
-        Workouts scheduled for the next two weeks
+    <Container>
+      <Typography color="primary" variant="h6" align="center" gutterBottom>
+        Workouts scheduled
       </Typography>
-      {scheduled.map((s) => (
-        <Card className={classes.root} key={s._id}>
-          <CardContent>
-            <Typography variant="h6" component="h2">
-              {bull} Date: {prettyDate(s.date)}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {bull} Hour: {s.hour}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {bull} Type: {convertType(s.type)}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              className={classes.button}
-              size="small"
-              startIcon={<DeleteIcon />}
-              onClick={() => onClick(s._id, s.date, s.hour)}
+      <Grid container>
+        {scheduled.map((s) => (
+          <Grid item key={s._id} xs={6} sm={4}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              textAlign="center"
+              mb={1}
             >
-              Delete
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
-    </>
+              <Card className={classes.card}>
+                <CardContent style={{ flexWrap: "nowrap", overflowX: "auto" }}>
+                  <Typography variant="h6" component="h2">
+                    {bull} Date: {prettyDate(s.date)}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {bull} Hour: {s.hour}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {bull} Type: {convertType(s.type)}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    className={classes.button}
+                    size="small"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => onClick(s._id, s.date, s.hour)}
+                  >
+                    Delete
+                  </Button>
+                </CardActions>
+              </Card>
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 };
 

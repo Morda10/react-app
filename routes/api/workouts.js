@@ -61,6 +61,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ errors: [{ msg: "No trainer assigned" }] });
     }
     if (workouts) {
+      console.log(workouts.hours);
       if (!workouts.hours.includes(hour)) {
         workouts.hours.push(hour);
         await workouts.save();

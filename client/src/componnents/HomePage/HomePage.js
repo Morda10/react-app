@@ -7,6 +7,8 @@ import axios from "axios";
 import WorkoutsButtonList from "./WorkoutsButtonList";
 import MyCalendar from "./MyCalendar";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
+import BottomNav from "../BottomNav";
+// import BottomNav from "../BottomNav";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   buttonClicked: {
     color: "white",
     transform: "translateY(-5rem)",
+    marginBottom: "-2rem",
     opacity: 0,
     visibility: "hidden",
     transition: "all .6s ease",
@@ -53,11 +56,25 @@ export const HomePage = () => {
   const [date, setdate] = useState(new Date());
   const [showButton, setshowButton] = useState(true);
   const [Dates, setDates] = useState([]);
+  const [deleted, setDeleted] = useState(false);
   const [workOutSaved, setworkOutSaved] = useState(false);
   const classes = useStyles({ showButton });
   const today = new Date();
 
-  const toggleButton = () => {
+  const handleClick = (event) => {
+    const anchor = (event.target.ownerDocument || document).querySelector(
+      "#hours"
+    );
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  const toggleButton = (e) => {
+    if (showButton) {
+      handleClick(e);
+    }
     setshowButton(!showButton);
   };
 
@@ -85,7 +102,7 @@ export const HomePage = () => {
     } catch (e) {
       console.log(e);
     }
-  }, [workOutSaved]);
+  }, [workOutSaved, deleted]);
 
   useEffect(() => {
     if (workOutSaved) {
@@ -96,7 +113,7 @@ export const HomePage = () => {
   }, [workOutSaved]);
 
   return (
-    <div style={{ marginTop: "3em" }}>
+    <div>
       <Box display="flex" justifyContent="center">
         <Button
           color="primary"
@@ -134,19 +151,21 @@ export const HomePage = () => {
             />
           </h1>
         ) : (
-          // <h1 className="title">Animating gradients</h1>
           <Fade in={!showButton} timeout={{ enter: 1000 }}>
-            <Box display="flex" justifyContent="center">
+            <Box justifyContent="center">
               <WorkoutsButtonList
                 Dates={Dates}
                 date={date}
                 setSaved={setworkOutSaved}
                 show={!showButton}
+                deleted={deleted}
+                setDeleted={setDeleted}
               />
             </Box>
           </Fade>
         )}
       </div>
+      <BottomNav />
     </div>
   );
 };
