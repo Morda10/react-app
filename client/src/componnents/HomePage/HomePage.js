@@ -8,6 +8,8 @@ import WorkoutsButtonList from "./WorkoutsButtonList";
 import MyCalendar from "./MyCalendar";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
 import BottomNav from "../BottomNav";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,13 +54,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const HomePage = () => {
+  const history = useHistory();
   const [date, setdate] = useState(new Date());
   const [showButton, setshowButton] = useState(true);
   const [Dates, setDates] = useState([]);
   const [deleted, setDeleted] = useState(false);
   const [workOutSaved, setworkOutSaved] = useState(false);
+  const { user } = useSelector((state) => state.user);
   const classes = useStyles({ showButton });
   const today = new Date();
+
+  useEffect(() => {
+    if (user.rank !== 2) {
+      history.push("/TrainerRoutes");
+    }
+  }, []);
 
   const handleClick = (event) => {
     const anchor = (event.target.ownerDocument || document).querySelector(

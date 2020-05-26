@@ -5,11 +5,10 @@ import { logout } from "../../redux/actions/authActions";
 import { useSelector, useDispatch } from "react-redux";
 import { Box } from "@material-ui/core";
 
-const Navbar = (props) => {
+const Navbar = ({ routing }) => {
   const user = useSelector((s) => s.user);
   const dispatch = useDispatch();
-  const rou = props.routing;
-  const navButtons = rou.map((r) => (
+  const navButtons = routing.map((r) => (
     <Link
       to={r.to}
       style={{ textDecoration: "none", color: "currentColor" }}

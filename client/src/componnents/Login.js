@@ -36,9 +36,9 @@ const Login = () => {
   const [errors, setErrors] = useState(null);
 
   useEffect(() => {
-    if (user) {
-      history.push("/");
-    }
+    if (user && (user.user.rank === 1 || user.user.rank === 0)) {
+      history.push("/TrainerHomePage");
+    } else if (user && user.user.rank === 2) history.push("/");
   }, [user, history]);
 
   return (
@@ -60,7 +60,12 @@ const Login = () => {
                   const res = await axios.post("/api/login/", values);
                   const { token } = res.data;
                   dispatch(setUser(token));
-                  history.push("/");
+                  if (user.user.rank === 1 || user.user.rank === 0) {
+                    history.push("/TrainerHomePage");
+                  } else {
+                    console.log(user.user);
+                    history.push("/");
+                  }
                 } catch (e) {
                   setErrors(e.response.data.errors[0].msg);
                   actions.resetForm();

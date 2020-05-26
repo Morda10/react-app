@@ -107,35 +107,3 @@ export const WorkoutsButtonList = ({
 };
 
 export default WorkoutsButtonList;
-
-// return (
-//   <>
-//     <Grid container justify="center">
-//       <Grid
-//         id={"hours"}
-//         item
-//         className={classes.root}
-//       >
-//         {show
-//           ? hours.map((a) => (
-//               <Button
-//                 key={a}
-//                 className={classes.buttons}
-//                 variant="contained"
-//                 size="small"
-//                 onClick={() => onClick(a)}
-//               >
-//                 {a}
-//               </Button>
-//             ))
-//           : null}
-//         {errors}
-//       </Grid>
-//     </Grid>
-//     <WorkoutsScheduled
-//       userID={userID}
-//       deleted={deleted}
-//       setDeleted={setDeleted}
-//     />
-//   </>
-// );

@@ -91,7 +91,12 @@ export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
 
   return (
     <Container>
-      <Typography color="primary" variant="h6" align="center" gutterBottom>
+      <Typography
+        color="primary"
+        variant="h6"
+        align="center"
+        style={{ marginBottom: "1em", marginTop: "1em", fontWeight: "bolder" }}
+      >
         Workouts scheduled
       </Typography>
       <Grid container>

@@ -7,7 +7,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
   const user = useSelector((state) => state.user);
 
   const navigate = (user, props) => {
-    if (!user) {
+    if (!user || (user && user.user.rank !== 2)) {
       return (
         <Redirect
           to={{

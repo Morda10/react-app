@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Card, CardContent, Button, Grid, Typography } from "@material-ui/core";
+import {
+  Card,
+  CardContent,
+  Button,
+  Grid,
+  Typography,
+  Checkbox,
+  FormControlLabel,
+} from "@material-ui/core";
 import MyTextField from "./Input/Input";
-import MySelect from "./Input/MySelect";
+// import MySelect from "./Input/MyTrainerSelect";
+import MyTrainerSelect from "./Input/MyTrainerSelect";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,6 +33,20 @@ const validationSchema = Yup.object().shape({
   trainer: Yup.string().required("Must have someone to train you"),
 });
 
+const validationSchema2 = Yup.object().shape({
+  name: Yup.string().required("name is required"),
+  email: Yup.string()
+    .email("Email not valid")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(5, "Password must be 5 characters or longer")
+    .required("password is required"),
+  repass: Yup.string()
+    .min(5, "Password must be 5 characters or longer")
+    .required("Enter password again")
+    .oneOf([Yup.ref("password"), null], "Password doesnt match"),
+});
+
 const useStyles = makeStyles({
   root: {
     marginTop: "2rem",
@@ -41,6 +64,7 @@ const Register = () => {
   const history = useHistory();
   const classes = useStyles();
   const [trainers, settrainers] = useState([]);
+  const [NewTrainer, setNewTrainer] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -55,6 +79,10 @@ const Register = () => {
     }
     fetchData();
   }, []);
+
+  const handleChange = () => {
+    setNewTrainer(!NewTrainer);
+  };
 
   return (
     <Grid container justify="center" style={{ marginTop: "3em" }}>
@@ -72,14 +100,21 @@ const Register = () => {
                 repass: "",
                 trainer: "",
               }}
-              validationSchema={validationSchema}
+              validationSchema={
+                NewTrainer ? validationSchema2 : validationSchema
+              }
               onSubmit={async (values, actions) => {
+                console.log(NewTrainer);
                 try {
-                  await axios.post("/api/users/", values);
-                  history.push("/");
+                  if (NewTrainer) {
+                    await axios.post("/api/users/newTrainer", values);
+                  } else {
+                    await axios.post("/api/users/", values);
+                  }
+                  history.push("/TrainerHomePage");
                   return;
                 } catch (e) {
-                  console.log(e);
+                  console.log(e.response.data.errors[0].msg);
                 }
                 actions.resetForm();
               }}
@@ -109,13 +144,28 @@ const Register = () => {
                     label="Renter password "
                   />
                   <br />
-                  <MySelect
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={NewTrainer}
+                        onChange={handleChange}
+                        value={NewTrainer}
+                        color="primary"
+                        name="AddTrainer"
+                        size="small"
+                      />
+                    }
+                    label="New Trainer"
+                    labelPlacement="end"
+                  />
+                  <MyTrainerSelect
+                    disabled={NewTrainer}
                     name="trainer"
                     as="select"
                     label="Trainer "
                     trainers={trainers}
+                    newTrainer={NewTrainer}
                   />
-                  <br />
                   <Button
                     className={classes.button}
                     variant="contained"
