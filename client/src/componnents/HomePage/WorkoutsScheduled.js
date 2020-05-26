@@ -96,7 +96,7 @@ export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
       </Typography>
       <Grid container>
         {scheduled.map((s) => (
-          <Grid item key={s._id} xs={6} sm={4}>
+          <Grid item key={s._id} xs={6}>
             <Box
               display="flex"
               justifyContent="center"
@@ -104,7 +104,7 @@ export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
               mb={1}
             >
               <Card className={classes.card}>
-                <CardContent style={{ flexWrap: "nowrap", overflowX: "auto" }}>
+                <CardContent>
                   <Typography variant="h6" component="h2">
                     {bull} Date: {prettyDate(s.date)}
                   </Typography>

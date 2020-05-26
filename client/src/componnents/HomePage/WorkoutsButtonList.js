@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Box, useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import axios from "axios";
@@ -10,9 +10,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     alignItems: "center",
-    maxWidth: "20em",
+    // maxWidth: "20em",
     overflowX: "auto",
     whiteSpace: "nowrap",
+    width: (p) => (p.matches ? "100%" : "20em"),
   },
   buttons: {
     color: "white",
@@ -37,14 +38,14 @@ export const WorkoutsButtonList = ({
   deleted,
   setDeleted,
 }) => {
-  const classes = useStyles();
+  const matches = useMediaQuery("(min-width:600px)");
+  const classes = useStyles({ matches });
   const [hours, sethours] = useState([]);
   const [errors, setErrors] = useState(null);
   const userObj = useSelector((state) => state.user);
   const userID = userObj.user.id;
 
   const onClick = async (a) => {
-    // window.scrollTo(0, document.body.scrollHeight);
     const newWorkout = new Date(moment(date).format("MM-DD-YYYY"));
     console.log(newWorkout);
     try {
@@ -68,7 +69,6 @@ export const WorkoutsButtonList = ({
         moment(date).format("DD-MM-YYYY") ===
         moment(d.date).format("DD-MM-YYYY")
       ) {
-        // scrollToBottom();
         found = true;
         sethours(d.hours);
         return;
@@ -79,31 +79,23 @@ export const WorkoutsButtonList = ({
 
   return (
     <>
-      <Grid container justify="center">
-        <Grid
-          id={"hours"}
-          item
-          className={classes.root}
-          xs={10}
-          sm={12}
-          md={12}
-        >
-          {show
-            ? hours.map((a) => (
-                <Button
-                  key={a}
-                  className={classes.buttons}
-                  variant="contained"
-                  size="small"
-                  onClick={() => onClick(a)}
-                >
-                  {a}
-                </Button>
-              ))
-            : null}
-          {errors}
-        </Grid>
-      </Grid>
+      <Box id={"hours"} className={classes.root}>
+        {show
+          ? hours.map((a) => (
+              <Button
+                key={a}
+                className={classes.buttons}
+                variant="contained"
+                size="small"
+                onClick={() => onClick(a)}
+              >
+                {a}
+              </Button>
+            ))
+          : null}
+        {errors}
+      </Box>
+
       <WorkoutsScheduled
         userID={userID}
         deleted={deleted}
@@ -114,3 +106,35 @@ export const WorkoutsButtonList = ({
 };
 
 export default WorkoutsButtonList;
+
+// return (
+//   <>
+//     <Grid container justify="center">
+//       <Grid
+//         id={"hours"}
+//         item
+//         className={classes.root}
+//       >
+//         {show
+//           ? hours.map((a) => (
+//               <Button
+//                 key={a}
+//                 className={classes.buttons}
+//                 variant="contained"
+//                 size="small"
+//                 onClick={() => onClick(a)}
+//               >
+//                 {a}
+//               </Button>
+//             ))
+//           : null}
+//         {errors}
+//       </Grid>
+//     </Grid>
+//     <WorkoutsScheduled
+//       userID={userID}
+//       deleted={deleted}
+//       setDeleted={setDeleted}
+//     />
+//   </>
+// );
