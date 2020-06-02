@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Typography, Grid, Card, CardContent } from "@material-ui/core";
+import {
+  Button,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Box,
+} from "@material-ui/core";
 import MyTextField from "./Input/Input";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -35,6 +42,52 @@ const Login = () => {
   const classes = useStyles();
   const [errors, setErrors] = useState(null);
 
+  const LoginTrainee = async () => {
+    try {
+      const values = {
+        email: "aaa@gmail.com",
+        password: "12345",
+      };
+      const res = await axios.post("/api/login/", values);
+      const { token } = res.data;
+      dispatch(setUser(token));
+      if (user) {
+        if (user.user.rank === 1 || user.user.rank === 0) {
+          history.push("/TrainerHomePage");
+        } else {
+          console.log(user.user);
+          history.push("/");
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      // setErrors(e.response.data.errors[0].msg);
+    }
+  };
+
+  const LoginTrainer = async () => {
+    try {
+      const values = {
+        email: "mor68466@gmail.com",
+        password: "12345",
+      };
+      const res = await axios.post("/api/login/", values);
+      const { token } = res.data;
+      dispatch(setUser(token));
+      if (user) {
+        if (user.user.rank === 1 || user.user.rank === 0) {
+          history.push("/TrainerHomePage");
+        } else {
+          console.log(user.user);
+          history.push("/");
+        }
+      }
+      history.push("/");
+    } catch (e) {
+      setErrors(e.response.data.errors[0].msg);
+    }
+  };
+
   useEffect(() => {
     if (user && (user.user.rank === 1 || user.user.rank === 0)) {
       history.push("/TrainerHomePage");
@@ -42,71 +95,89 @@ const Login = () => {
   }, [user, history]);
 
   return (
-    <Grid container justify="center" style={{ marginTop: "3em" }}>
-      <Grid item xs={10} sm={8} lg={6} xl={4}>
-        <Card className={classes.root}>
-          <CardContent>
-            <Typography align="center" variant="h3">
-              Login
-            </Typography>
-            <Formik
-              initialValues={{
-                email: "",
-                password: "",
-              }}
-              validationSchema={validationSchema}
-              onSubmit={async (values, actions) => {
-                try {
-                  const res = await axios.post("/api/login/", values);
-                  const { token } = res.data;
-                  dispatch(setUser(token));
-                  if (user.user.rank === 1 || user.user.rank === 0) {
-                    history.push("/TrainerHomePage");
-                  } else {
-                    console.log(user.user);
-                    history.push("/");
+    <>
+      <Box display="flex" justifyContent="center">
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => LoginTrainee()}
+        >
+          Login as a Trainee
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => LoginTrainer()}
+        >
+          Login as a Trainer
+        </Button>
+      </Box>
+      <Grid container justify="center" style={{ marginTop: "3em" }}>
+        <Grid item xs={10} sm={8} lg={6} xl={4}>
+          <Card className={classes.root}>
+            <CardContent>
+              <Typography align="center" variant="h3">
+                Login
+              </Typography>
+              <Formik
+                initialValues={{
+                  email: "",
+                  password: "",
+                }}
+                validationSchema={validationSchema}
+                onSubmit={async (values, actions) => {
+                  try {
+                    const res = await axios.post("/api/login/", values);
+                    const { token } = res.data;
+                    dispatch(setUser(token));
+                    if (user.user.rank === 1 || user.user.rank === 0) {
+                      history.push("/TrainerHomePage");
+                    } else {
+                      console.log(user.user);
+                      history.push("/");
+                    }
+                  } catch (e) {
+                    setErrors(e.response.data.errors[0].msg);
+                    actions.resetForm();
                   }
-                } catch (e) {
-                  setErrors(e.response.data.errors[0].msg);
-                  actions.resetForm();
-                }
-              }}
-            >
-              {(values, isSubmitting) => (
-                <Form>
-                  <MyTextField
-                    key="1"
-                    name="email"
-                    type="email"
-                    label="Email"
-                  />
-                  <br />
-                  <MyTextField
-                    key="2"
-                    name="password"
-                    type="password"
-                    label="Password "
-                  />
-                  <br />
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    fullWidth
-                    disabled={isSubmitting}
-                    type="submit"
-                  >
-                    Login
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-            <Typography variant="h6" color="error">
-              {errors}
-            </Typography>
-          </CardContent>
-        </Card>
+                }}
+              >
+                {(values, isSubmitting) => (
+                  <Form>
+                    <MyTextField
+                      key="1"
+                      name="email"
+                      type="email"
+                      label="Email"
+                    />
+                    <br />
+                    <MyTextField
+                      key="2"
+                      name="password"
+                      type="password"
+                      label="Password "
+                    />
+                    <br />
+                    <Button
+                      className={classes.button}
+                      variant="contained"
+                      fullWidth
+                      disabled={isSubmitting}
+                      type="submit"
+                    >
+                      Login
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+              <Typography variant="h6" color="error">
+                {errors}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 
