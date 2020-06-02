@@ -69,7 +69,7 @@ const Login = () => {
     try {
       const values = {
         email: "mor68466@gmail.com",
-        password: "123456",
+        password: "12345",
       };
       const res = await axios.post("/api/login/", values);
       const { token } = res.data;
