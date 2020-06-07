@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 
 export default function BottomNav({ routing }) {
   const classes = useStyles();
-  const [value, setValue] = useState("recents");
+  const [value, setValue] = useState("workouts");
   const [loadNav, setloadNav] = useState(false);
 
   const handleChange = (event, newValue) => {
