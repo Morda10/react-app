@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Box, useMediaQuery } from "@material-ui/core";
+import { Button, Box, useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import axios from "axios";
@@ -47,7 +47,7 @@ export const WorkoutsButtonList = ({
 
   const onClick = async (a) => {
     const newWorkout = new Date(moment(date).format("MM-DD-YYYY"));
-    console.log(newWorkout);
+    // console.log(newWorkout);
     try {
       const res = await axios.post("/api/workouts/", {
         date: newWorkout,

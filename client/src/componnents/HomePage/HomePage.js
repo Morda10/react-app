@@ -7,7 +7,6 @@ import axios from "axios";
 import WorkoutsButtonList from "./WorkoutsButtonList";
 import MyCalendar from "./MyCalendar";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
-import BottomNav from "../BottomNav";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -68,6 +67,7 @@ export const HomePage = () => {
     if (user.rank !== 2) {
       history.push("/TrainerRoutes");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClick = (event) => {
@@ -174,7 +174,7 @@ export const HomePage = () => {
           </Fade>
         )}
       </div>
-      <BottomNav />
+     
     </div>
   );
 };

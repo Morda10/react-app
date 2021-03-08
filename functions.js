@@ -1,6 +1,6 @@
 const moment = require("moment");
 
-const twoWeeksArrayMaker = (today, StartWork, LastWorkout) => {
+function twoWeeksArrayMaker(today, StartWork, LastWorkout){
   const hour_range = (start, finish) => {
     const suffix = ":00";
     const res = [start.toString().concat(suffix)];
@@ -9,7 +9,7 @@ const twoWeeksArrayMaker = (today, StartWork, LastWorkout) => {
       s = (s + 1) % 24;
       res.push((s % 24).toString().concat(suffix));
     }
-
+    // console.log("object")
     return res;
   };
   const hoursArr = hour_range(StartWork, LastWorkout);
@@ -28,4 +28,13 @@ const twoWeeksArrayMaker = (today, StartWork, LastWorkout) => {
   return dates;
 };
 
-module.exports = twoWeeksArrayMaker;
+
+function isDateInArr(date, measurements){
+ for (let i = 0; i < measurements.length; i++) {
+   const element = measurements[i];
+   if(moment(date).format("DD:MM:YYYY") ===moment(element.date).format("DD:MM:YYYY")) return true
+ }
+  return false
+}
+
+module.exports = {isDateInArr, twoWeeksArrayMaker}

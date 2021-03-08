@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Workouts = require("../../models/Workouts");
-const User = require("../../models/User");
+const User = require("../../models/Trainee");
+const Trainer = require("../../models/Trainer");
 const moment = require("moment");
-const twoWeeksArrayMaker = require("../../functions");
+const {twoWeeksArrayMaker} = require("../../functions");
 const auth = require("../../middleware/auth");
 
 //get workouts by date
@@ -12,6 +13,7 @@ router.get("/:date", async (req, res) => {
   const StartWork = 10;
   const LastWorkout = 22;
   const twoWeeksArr = twoWeeksArrayMaker(today, StartWork, LastWorkout);
+  // console.log(twoWeeksArr)
   try {
     const date1 = moment(req.params.date, "DD-MM-YYYY").format();
     const date2 = moment(date1)
@@ -24,13 +26,15 @@ router.get("/:date", async (req, res) => {
     });
     if (workouts.length !== 0) {
       workouts.map((o) => {
-        twoWeeksArr.forEach((t) => {
+        for (let i = 0; i < twoWeeksArr.length; i++) {
+          const t = twoWeeksArr[i];
           const tdate = moment(t.date).format("DD-MM-YYYY");
           const odate = moment(o.date).format("DD-MM-YYYY");
           if (tdate === odate) {
             t.hours = t.hours.filter((h) => !o.hours.includes(h));
           }
-        });
+          
+        }
       });
     }
     return res.status(200).json(twoWeeksArr);
@@ -56,7 +60,8 @@ router.post("/", async (req, res) => {
     if (!trainee) {
       return res.status(400).json({ errors: [{ msg: "Wrong userID" }] });
     }
-    let trainer = await User.findById(trainee.trainer).populate();
+    let trainer = await Trainer.findById(trainee.trainer);
+    // let trainer = await Trainer.findById(trainee.trainer).populate();
     if (!trainer) {
       return res.status(400).json({ errors: [{ msg: "No trainer assigned" }] });
     }

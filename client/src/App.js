@@ -1,26 +1,41 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Navbar from "../src/UI/Navbar/Navbar";
-import Login from "./componnents/Login";
+import Login from "./componnents/Login and Register/Login";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Register from "./componnents/Register";
-import HomePage from "./componnents/HomePage/HomePage";
+import Register from "./componnents/Login and Register/Register";
 import { useSelector } from "react-redux";
-import PrivateRoute from "./PrivateRoute";
-import AdminRoutes from "./AdminRoutes";
+import PrivateRoute from "./componnents/ProtectedRoutes/PrivateRoute";
+// import AdminRoutes from "./AdminRoutes";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./UI/Theme";
-import TrainerRoutes from "./TrainerRoutes";
+import TrainerRoutes from "./componnents/ProtectedRoutes/TrainerRoutes";
 import { TrainerHomePage } from "./componnents/TrainerHomePage/TrainerHomePage";
+import HomePage from './componnents/HomePage/HomePage'
+import { Measurements } from "./componnents/trainee pages/Measurements/Measurements";
+import { Series } from "./componnents/trainee pages/Series/Series";
+import { Nutrition } from "./componnents/trainee pages/Nutrition/Nutrition";
+import BottomNav from './UI/BottomNav'
 
 const App = () => {
   const user = useSelector((state) => state.user);
-  const [routing, setRouting] = useState([{ to: "/Login", name: "Login" }]);
+  const uRoutes = [
+                   { path: "/Trainee", component: HomePage},
+                   { path: "/Trainee/Measurements", component: Measurements},
+                   { path: "/Trainee/Series", component: Series},
+                   { path: "/Trainee/Nutrition", component: Nutrition},
+                    
+           ]
+  const [routing, setRouting] = useState([{ to: "/Login", name: "Login" }])
+  const userRoutes = uRoutes.map(r => 
+    <PrivateRoute key={r.path} exact path={r.path} component={r.component} />
+  )
+
 
   useEffect(() => {
     if (user) {
       if (user.user.rank === 2) {
-        setRouting([{ to: "/", name: "Home" }]);
+        setRouting([{ to: "/Trainee", name: "Home" }]);
       } else if (!user.user.rank || user.user.rank === 1) {
         setRouting([
           { to: "/TrainerHomePage", name: "Home" },
@@ -35,21 +50,18 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Fragment>
+        <>
           <Navbar routing={routing} />
           <div style={{ marginBottom: 80 }}>
             <Switch>
-              <PrivateRoute exact path="/" component={HomePage} />
-              <TrainerRoutes
-                exact
-                path="/TrainerHomePage"
-                component={TrainerHomePage}
-              />
+              <TrainerRoutes exact path="/TrainerHomePage" component={TrainerHomePage} />
               <Route exact path="/Login" component={Login} />
               <TrainerRoutes exact path="/Register" component={Register} />
+              {userRoutes}
             </Switch>
           </div>
-        </Fragment>
+          <BottomNav />
+        </>
       </Router>
     </ThemeProvider>
   );

@@ -5,7 +5,9 @@ const Yup = require("yup");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
 const auth = require("../../middleware/auth");
-const User = require("../../models/User");
+// NEEDD TO CHANGE TO TRANERS AND TRAINEES
+const Trainee = require("../../models/Trainee");
+const Trainer = require("../../models/Trainer");
 env.config();
 
 const validationSchema = Yup.object().shape({
@@ -37,36 +39,46 @@ const validationSchema2 = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Password doesnt match"),
 });
 
-//get all users
-router.get("/", auth, async (req, res) => {
+//get all trainees
+router.get("/getAllTrainees", auth, async (req, res) => {
   try {
-    const users = await User.find();
-    return res.status(200).json(users);
+    const trainees = await Trainees.find();
+    return res.status(200).json(trainees);
+  } catch (error) {
+    console.log("error");
+  }
+});
+
+//get all trainers
+router.get("/getAllTrainers", auth, async (req, res) => {
+  try {
+    const trainers = await Trainers.find();
+    return res.status(200).json(trainers);
   } catch (error) {
     console.log("error");
   }
 });
 
 //register new trainee
-router.post("/", async (req, res) => {
+router.post("/registerNewTrainee", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const trainerID = req.body.trainer;
   try {
     await validationSchema.validate(req.body, { abortEarly: false });
     console.log(req.body);
-    let user = await User.findOne({ email });
-    let trainer = await User.findById(trainerID);
+    let user = await Trainee.findOne({ email });
+    let trainer = await Trainer.findById(trainerID);
     if (!trainer) {
       return res
         .status(400)
         .json({ errors: [{ msg: "Trainer doesnt exists" }] });
     }
     if (user) {
-      return res.status(400).json({ errors: [{ msg: "User already exists" }] });
+      return res.status(400).json({ errors: [{ msg: "Trainee already exists" }] });
     }
 
-    const newUser = new User({
+    const newUser = new Trainee({
       name: req.body.name,
       email,
       password,
@@ -89,24 +101,23 @@ router.post("/", async (req, res) => {
 });
 
 //register new trainer
-router.post("/newTrainer", async (req, res) => {
+router.post("/registerNewTrainer", async (req, res) => {
   // console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
-  const rank = 1;
+  // const rank = 1;
 
   try {
-    await validationSchema2.validate(req.body, { abortEarly: false });
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ errors: [{ msg: "User already exists" }] });
+    // await validationSchema2.validate(req.body, { abortEarly: false });
+    let trainer = await Trainer.findOne({ email });
+    if (trainer) {
+      return res.status(400).json({ errors: [{ msg: "Trainer already exists" }] });
     }
 
-    const newUser = new User({
+    const newUser = new Trainer({
       name: req.body.name,
       email,
       password,
-      rank,
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -121,15 +132,29 @@ router.post("/newTrainer", async (req, res) => {
   }
 });
 
-//delete user by id
-router.delete("/:id", async (req, res) => {
+//delete trainer by id
+router.delete("/deleteTrainerByID:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await User.findByIdAndDelete(id);
+    const result = await Trainer.findByIdAndDelete(id);
     if (!result) {
       return res.status(400).json("error");
     }
-    return res.status(200).json("ss");
+    return res.status(200).json("Trainer deleted successfully");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//delete trainee by id
+router.delete("/deleteTraineeByID:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await Trainee.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(400).json("error");
+    }
+    return res.status(200).json("Trainee deleted successfully");
   } catch (error) {
     console.log(error);
   }

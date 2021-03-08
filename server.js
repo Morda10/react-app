@@ -35,6 +35,7 @@ app.use("/api/login", require("./routes/api/login"));
 app.use("/api/workouts", require("./routes/api/workouts"));
 app.use("/api/trainers", require("./routes/api/trainers"));
 app.use("/api/trainees", require("./routes/api/trainees"));
+app.use("/api/measurements", require("./routes/api/measurements"));
 //app.use('/api/user', middleware, require('./routes/api/user'));
 
 // Serve static assets in production

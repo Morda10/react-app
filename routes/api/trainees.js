@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const moment = require("moment");
-const User = require("../../models/User");
+const User = require("../../models/Trainee");
 const Workouts = require("../../models/Workouts");
 
 //get scheduled workouts of a trainee
@@ -56,15 +56,3 @@ router.put("/deleteWorkout", async (req, res) => {
 
 module.exports = router;
 
-// router.delete("/:id", async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const result = await User.findByIdAndDelete(id);
-//     if (!result) {
-//       return res.status(400).json("error");
-//     }
-//     return res.status(200).json("ss");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });

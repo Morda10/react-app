@@ -1,9 +1,10 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import { logout } from "../../redux/actions/authActions";
 import { useSelector, useDispatch } from "react-redux";
 import { Box } from "@material-ui/core";
+import { logout } from "../../redux/reducers/UserReducer";
 
 const Navbar = ({ routing }) => {
   const user = useSelector((s) => s.user);

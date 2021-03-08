@@ -7,6 +7,10 @@ import AssessmentIcon from "@material-ui/icons/Assessment";
 import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
 import LineWeightIcon from "@material-ui/icons/LineWeight";
+import {  useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {setBottomNavTab} from '../redux/reducers/UserReducer'
+
 
 const useStyles = makeStyles({
   root: {
@@ -16,13 +20,24 @@ const useStyles = makeStyles({
   },
 });
 
-export default function BottomNav({ routing }) {
+export default function BottomNav() {
   const classes = useStyles();
-  const [value, setValue] = useState("workouts");
+  const bottomNavTab = useSelector(state => state.bottomNavTab)
+  const dispatch = useDispatch()
+  const [value, setValue] = useState(bottomNavTab);
+  // const [value, setValue] = useState("workouts");
   const [loadNav, setloadNav] = useState(false);
+  const history = useHistory()
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    dispatch(setBottomNavTab({bottomNavTab: newValue}))
+    console.log(bottomNavTab)
+    if(newValue !== "workouts")
+     { history.push("/Trainee/" + newValue)  }
+    else{
+     history.push("/Trainee")
+    }
   };
 
   useEffect(() => {
@@ -46,8 +61,8 @@ export default function BottomNav({ routing }) {
           icon={<FitnessCenterIcon />}
         />
         <BottomNavigationAction
-          label="Measures"
-          value="measures"
+          label="Measurements"
+          value="Measurements"
           icon={<AssessmentIcon />}
         />
         <BottomNavigationAction

@@ -68,6 +68,7 @@ export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
       }
     }
     fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleted]);
 
   const onClick = async (workoutID, workoutDate, hour) => {
