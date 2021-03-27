@@ -8,8 +8,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import moment from 'moment';
-import { IconButton } from '@material-ui/core';
+import { IconButton, TextField  } from '@material-ui/core';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
+import { NewMeasurement } from './NewMeasurement';
+import { useDispatch, useSelector } from 'react-redux'
+import { setMeasurements } from '../../../redux/reducers/UserReducer'
+import MyTextField from '../../Input/Input'
+import Axios from 'axios'
+import { Form, Formik } from 'formik'
 
 const useStyles = makeStyles({
   table: {
@@ -20,12 +26,12 @@ const useStyles = makeStyles({
 
 export const Measurement = ({measurements}) => {
     const classes = useStyles();
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch()
     const [addingRow, setAddingRow] = useState(false)
+    const [errors, setErrors] = useState(undefined)
     
-useEffect(() => {
-  console.log(measurements)
- 
-}, [measurements])
+
 
     const columns = [
       { id: 'Date', label: 'Date', minWidth: 50 },
@@ -60,14 +66,7 @@ useEffect(() => {
       },
   ];
 
-  const newRow = 
-      <TableRow >
-           <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-      </TableRow>
+
 
     return (
       <>
@@ -99,13 +98,14 @@ useEffect(() => {
                 <TableCell align="right">{m.pelvis}</TableCell>
               </TableRow>
             ))}
-            {addingRow ? newRow : null}
           </TableBody>
         </Table>
       </TableContainer>
-      {addingRow ? null :  <IconButton onClick={()=>{setAddingRow(true)}}>
+        {addingRow ? <NewMeasurement addingRow={addingRow} /> : null}
+        {addingRow ? null :  <IconButton onClick={()=>{setAddingRow(true)}}>
               <ControlPointIcon color="primary" fontSize="large"/>
-      </IconButton>}
+        </IconButton>}
+   
        </>
     )
 }

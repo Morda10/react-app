@@ -142,7 +142,7 @@ const Login = () => {
                       history.push("/TrainerHomePage");
                     } else {
                       console.log(user.user);
-                      history.push("/");
+                      history.push("/Login");
                     }
                   } catch (e) {
                     setErrors(e.response.data.errors[0].msg);
@@ -165,12 +165,12 @@ const Login = () => {
                       type="password"
                       label="Password "
                     />
-                    <Checkbox
+                    {/* <Checkbox
                       checked={isTrainer}
                       // name="trainer"
                       label="Password "
                       onChange={handleChange}
-                    />
+                    /> */}
                     <br />
                     <Button
                       className={classes.button}

@@ -133,7 +133,7 @@ router.post("/registerNewTrainer", async (req, res) => {
 });
 
 //delete trainer by id
-router.delete("/deleteTrainerByID:id", async (req, res) => {
+router.delete("/deleteTrainerByID/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const result = await Trainer.findByIdAndDelete(id);
@@ -147,7 +147,7 @@ router.delete("/deleteTrainerByID:id", async (req, res) => {
 });
 
 //delete trainee by id
-router.delete("/deleteTraineeByID:id", async (req, res) => {
+router.delete("/deleteTraineeByID/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const result = await Trainee.findByIdAndDelete(id);

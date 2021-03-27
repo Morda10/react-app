@@ -39,18 +39,19 @@ router.post("/createMeasurement", async (req, res) => {
       });  
       console.log(newRecord)  
       await newRecord.save();
+      return res.status(200).json(newRecord);
     }
     else{
       // this date already exist
       if(isDateInArr(measurement.date,  userMeasurements.measurements))  {
-         return res.status(200).json("There is a record for this date!");
+         return res.status(200).json({err : "There is a record for this date!"});
         }
       // add to existed record
       userMeasurements.measurements.push(measurement)
       await userMeasurements.save();
     }
    
-    return res.status(200).json("Measurement saved!");
+    return res.status(200).json(userMeasurements);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ errors: [{ msg: "Server error" }] });

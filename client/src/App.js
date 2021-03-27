@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Navbar from "../src/UI/Navbar/Navbar";
-import Login from "./componnents/Login and Register/Login";
+import Login from "./components/Login and Register/Login";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Register from "./componnents/Login and Register/Register";
+import Register from "./components/Login and Register/Register";
 import { useSelector } from "react-redux";
-import PrivateRoute from "./componnents/ProtectedRoutes/PrivateRoute";
+import PrivateRoute from "./components/ProtectedRoutes/PrivateRoute";
 // import AdminRoutes from "./AdminRoutes";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./UI/Theme";
-import TrainerRoutes from "./componnents/ProtectedRoutes/TrainerRoutes";
-import { TrainerHomePage } from "./componnents/TrainerHomePage/TrainerHomePage";
-import HomePage from './componnents/HomePage/HomePage'
-import { Measurements } from "./componnents/trainee pages/Measurements/Measurements";
-import { Series } from "./componnents/trainee pages/Series/Series";
-import { Nutrition } from "./componnents/trainee pages/Nutrition/Nutrition";
+import TrainerRoutes from "./components/ProtectedRoutes/TrainerRoutes";
+import { TrainerHomePage } from "./components/TrainerHomePage/TrainerHomePage";
+import HomePage from './components/HomePage/HomePage'
+import { Measurements } from "./components/trainee pages/Measurements/Measurements";
+import { Series } from "./components/trainee pages/Series/Series";
+import { Nutrition } from "./components/trainee pages/Nutrition/Nutrition";
 import BottomNav from './UI/BottomNav'
 
 const App = () => {
@@ -56,11 +56,12 @@ const App = () => {
             <Switch>
               <TrainerRoutes exact path="/TrainerHomePage" component={TrainerHomePage} />
               <Route exact path="/Login" component={Login} />
+              <Route exact path="/" component={Login} />
               <TrainerRoutes exact path="/Register" component={Register} />
               {userRoutes}
             </Switch>
           </div>
-          <BottomNav />
+          {user ? <BottomNav /> : null}
         </>
       </Router>
     </ThemeProvider>
