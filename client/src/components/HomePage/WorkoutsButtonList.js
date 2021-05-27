@@ -5,7 +5,7 @@ import moment from "moment";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import WorkoutsScheduled from "./WorkoutsScheduled";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Loading from '../../UI/Loading/Loading'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     // maxWidth: "20em",
     overflowX: "auto",
     whiteSpace: "nowrap",
+    height: "5rem",
     width: (p) => (p.matches ? "100%" : "20em"),
   },
   buttons: {
@@ -46,6 +47,7 @@ export const WorkoutsButtonList = ({
   const [loading, setLoading] = useState(false);
   const userObj = useSelector((state) => state.user);
   const userID = userObj.user.id;
+
 
   const onClick = async (a) => {
     const newWorkout = new Date(moment(date).format("MM-DD-YYYY"));
@@ -80,8 +82,7 @@ export const WorkoutsButtonList = ({
     if (!found) sethours([]);
   }, [date, Dates, deleted]);
 
-  const hoursMap = loading ? <CircularProgress /> : 
-    (hours.map((a) => (
+  const hoursMap = (hours.map((a) => (
       <Button
         key={a}
         fullWidth
@@ -96,12 +97,13 @@ export const WorkoutsButtonList = ({
 
   return (
     <>
-      <Box id={"hours"} className={classes.root}>
+      {loading ? <Loading/> : 
+        (<Box id={"hours"} className={classes.root}>
         {show
           ? hoursMap
           : null}
         {errors}
-      </Box>
+      </Box>)}
 
       <WorkoutsScheduled
         userID={userID}

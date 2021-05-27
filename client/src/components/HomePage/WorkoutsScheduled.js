@@ -15,6 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Loading } from "../../UI/Loading/Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +60,7 @@ export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
   };
   useEffect(() => {
     async function fetch() {
+      setLoading(true)
       const res = await Axios.get(`api/trainees/scheduled/${userID}`);
       if (res.data.length !== 0) {
         console.log(res.data);
@@ -69,7 +71,7 @@ export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
         setDeleted(false);
       }
     }
-    setLoading(true)
+    
     fetch();
     setLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,7 +127,7 @@ export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
             </Typography>
           </CardContent>
           <CardActions>
-            {loading ? <CircularProgress align='center'/> : 
+            {loading ? <Loading /> : 
               (<Button
               className={classes.button}
               size="small"
@@ -151,7 +153,7 @@ export const WorkoutsScheduled = ({ userID, deleted, setDeleted }) => {
         Workouts scheduled
       </Typography>
       <Grid container>
-        {loading ? <CircularProgress  align='center'/> : scheduledWorkouts}
+        { scheduledWorkouts}
       </Grid>
     </Container>
   );
