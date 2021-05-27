@@ -5,6 +5,7 @@ import moment from "moment";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import WorkoutsScheduled from "./WorkoutsScheduled";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,12 +43,13 @@ export const WorkoutsButtonList = ({
   const classes = useStyles({ matches });
   const [hours, sethours] = useState([]);
   const [errors, setErrors] = useState(null);
+  const [loading, setLoading] = useState(false);
   const userObj = useSelector((state) => state.user);
   const userID = userObj.user.id;
 
   const onClick = async (a) => {
     const newWorkout = new Date(moment(date).format("MM-DD-YYYY"));
-    // console.log(newWorkout);
+    setLoading(true)
     try {
       const res = await axios.post("/api/workouts/", {
         date: newWorkout,
@@ -56,6 +58,7 @@ export const WorkoutsButtonList = ({
       });
       console.log(res.data);
       setSaved(true);
+      setLoading(false)
     } catch (e) {
       setErrors(e.response.data.errors[0].msg);
       // console.log(e.response.data.errors[0].msg);
@@ -77,22 +80,25 @@ export const WorkoutsButtonList = ({
     if (!found) sethours([]);
   }, [date, Dates, deleted]);
 
+  const hoursMap = loading ? <CircularProgress /> : 
+    (hours.map((a) => (
+      <Button
+        key={a}
+        fullWidth
+        className={classes.buttons}
+        variant="contained"
+        size="small"
+        onClick={() => onClick(a)}
+      >
+        {a}
+      </Button>
+    )))
+
   return (
     <>
       <Box id={"hours"} className={classes.root}>
         {show
-          ? hours.map((a) => (
-              <Button
-                key={a}
-                fullWidth
-                className={classes.buttons}
-                variant="contained"
-                size="small"
-                onClick={() => onClick(a)}
-              >
-                {a}
-              </Button>
-            ))
+          ? hoursMap
           : null}
         {errors}
       </Box>
