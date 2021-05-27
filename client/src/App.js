@@ -26,7 +26,7 @@ const App = () => {
                    { path: "/Trainee/Nutrition", component: Nutrition},
                     
            ]
-  const [routing, setRouting] = useState([{ to: "/Login", name: "Login" }])
+  const [routing, setRouting] = useState([{ to: "/", name: "Login" }])
   const userRoutes = uRoutes.map(r => 
     <PrivateRoute key={r.path} exact path={r.path} component={r.component} />
   )
@@ -43,7 +43,7 @@ const App = () => {
         ]);
       }
     } else {
-      setRouting([{ to: "/Login", name: "Login" }]);
+      setRouting([{ to: "/", name: "Login" }]);
     }
   }, [user]);
 
@@ -55,7 +55,7 @@ const App = () => {
           <div style={{ marginBottom: 80 }}>
             <Switch>
               <TrainerRoutes exact path="/TrainerHomePage" component={TrainerHomePage} />
-              <Route exact path="/Login" component={Login} />
+              {/* <Route exact path="/Login" component={Login} /> */}
               <Route exact path="/" component={Login} />
               <TrainerRoutes exact path="/Register" component={Register} />
               {userRoutes}

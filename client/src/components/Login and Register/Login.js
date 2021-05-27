@@ -148,7 +148,7 @@ const Login = () => {
                       history.push("/TrainerHomePage");
                     } else {
                       console.log(user.user);
-                      history.push("/Login");
+                      history.push("/");
                     }
                    }
                   } catch (e) {

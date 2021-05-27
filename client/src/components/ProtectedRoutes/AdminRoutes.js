@@ -11,7 +11,7 @@ export default function AdminRoutes({ component: Component, ...rest }) {
       return (
         <Redirect
           to={{
-            pathname: "/Login",
+            pathname: "/",
             state: {
               lastPath: window.location.pathname,
             },

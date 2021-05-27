@@ -26,7 +26,7 @@ const Navbar = ({ routing }) => {
         <Button
           onClick={() => {
             dispatch(logout());
-            window.location.href = "/Login";
+            window.location.href = "/";
           }}
           style={{ textDecoration: "none", color: "currentColor" }}
           color="inherit"

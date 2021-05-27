@@ -25,6 +25,8 @@ export const UserReducer = createReducer(initialState, {
     state = {
       user: null,
       token: null,
+      measurements: [],
+      bottomNavTab: "workouts"
     };
     return state;
   },

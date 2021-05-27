@@ -22,7 +22,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 //   if (decoded.exp < currentTime) {
 //     store.dispatch(logout());
-//     window.location.href = "/Login";
+//     window.location.href = "/";
 //   } else {
 //     store.dispatch(setUser(token));
 //   }
@@ -41,7 +41,7 @@ if (persistStorage && persistStorage.token !== null) {
     decoded = jwt_decode(persistStorage.token);
     if (decoded.exp < currentTime) {
       store.dispatch(logout());
-      window.location.href = "/Login";
+      window.location.href = "/";
     } else {
       // console.log(persistStorage.token)
       store.dispatch(setUser({user: persistStorage.token}));

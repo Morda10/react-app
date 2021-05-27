@@ -12,7 +12,7 @@ export default function TrainerRoutes({ component: Component, ...rest }) {
         return (
           <Redirect
             to={{
-              pathname: "/Login",
+              pathname: "/",
               state: {
                 lastPath: window.location.pathname,
               },
@@ -24,7 +24,7 @@ export default function TrainerRoutes({ component: Component, ...rest }) {
       return (
         <Redirect
           to={{
-            pathname: "/Login",
+            pathname: "/",
             state: {
               lastPath: window.location.pathname,
             },
