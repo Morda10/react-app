@@ -24,15 +24,17 @@ router.put("/deleteWorkout", async (req, res) => {
   const { workoutID, userID, workoutDate, hour } = req.body;
   const date = moment(workoutDate).format();
   try {
-    let user = await User.findByIdAndUpdate(userID);
+    let user = await User.findByIdAndUpdate(userID).populate('trainer');
     let workout = await Workouts.findOne({ date });
-    console.log(req.body);
+    // console.log(req.body);
+    console.log(user);
     if (!user || !workout)
       return res
         .status(400)
         .json({ errors: [{ msg: "User or workout does not exists" }] });
-    let trainer = await User.findById(user.trainer).populate();
-    console.log("heree");
+
+    let trainer = user.trainer
+    console.log(trainer);
     user.workoutsScheduled = user.workoutsScheduled.filter(
       (w) => JSON.stringify(w._id) !== JSON.stringify(workoutID)
     );
