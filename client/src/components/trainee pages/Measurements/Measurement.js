@@ -66,7 +66,18 @@ export const Measurement = ({measurements}) => {
       },
   ];
 
-
+  const measurmentsData = measurements ? (measurements.map((m) => (
+    <TableRow key={m.date}>
+      <TableCell component="th" scope="row">
+        {moment(m.date).format("DD/MM/YYYY")}
+      </TableCell>
+      <TableCell align="right">{m.weight}</TableCell>
+      <TableCell align="right">{m.waist}</TableCell>
+      <TableCell align="right">{m.arms}</TableCell>
+      <TableCell align="right">{m.thighes}</TableCell>
+      <TableCell align="right">{m.pelvis}</TableCell>
+    </TableRow>
+  ))) : null
 
     return (
       <>
@@ -86,18 +97,7 @@ export const Measurement = ({measurements}) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {measurements.map((m) => (
-              <TableRow key={m.date}>
-                <TableCell component="th" scope="row">
-                  {moment(m.date).format("DD/MM/YYYY")}
-                </TableCell>
-                <TableCell align="right">{m.weight}</TableCell>
-                <TableCell align="right">{m.waist}</TableCell>
-                <TableCell align="right">{m.arms}</TableCell>
-                <TableCell align="right">{m.thighes}</TableCell>
-                <TableCell align="right">{m.pelvis}</TableCell>
-              </TableRow>
-            ))}
+            {measurements ? measurmentsData : null}
           </TableBody>
         </Table>
       </TableContainer>

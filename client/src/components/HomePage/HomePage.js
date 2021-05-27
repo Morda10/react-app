@@ -5,10 +5,10 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import moment from "moment";
 import axios from "axios";
 import WorkoutsButtonList from "./WorkoutsButtonList";
-import MyCalendar from "./MyCalendar";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { CalendarShedule } from "../CalendarShedule/CalendarShedule";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,14 +88,8 @@ export const HomePage = () => {
   };
 
   const onChange = (date) => {
-    // console.log(date);
-    if (typeof date.format === "function") {
-      setdate(date.format());
-      console.log(date.format());
-      setworkOutSaved(false);
-    } else {
-    }
-  };
+    setdate(date)
+  }
 
   useEffect(() => {
     const today = new Date();
@@ -121,32 +115,37 @@ export const HomePage = () => {
     }
   }, [workOutSaved]);
 
+  const scheduleWorkoutButton = (<Box display="flex" justifyContent="center">
+  <Button
+    color="primary"
+    size="large"
+    className={showButton ? classes.button : classes.buttonClicked}
+    onClick={toggleButton}
+  >
+    Schedule a workout
+  </Button>
+</Box>)
+
+  const arrowButton = (<Button
+    color="primary"
+    size="large"
+    className={showButton ? classes.vanish : classes.backButton}
+    variant="outlined"
+    onClick={toggleButton}
+    disableRipple
+  >
+    <ArrowBackIcon className={classes.backIcon} />
+  </Button>)
+
   return (
     <div>
-      <Box display="flex" justifyContent="center">
-        <Button
-          color="primary"
-          size="large"
-          className={showButton ? classes.button : classes.buttonClicked}
-          onClick={toggleButton}
-        >
-          Schedule a workout
-        </Button>
-      </Box>
-      <Button
-        color="primary"
-        size="large"
-        className={showButton ? classes.vanish : classes.backButton}
-        variant="outlined"
-        onClick={toggleButton}
-        disableRipple
-      >
-        <ArrowBackIcon className={classes.backIcon} />
-      </Button>
+      {scheduleWorkoutButton}
+      {arrowButton}
 
       <Fade in={!showButton} timeout={{ enter: 1000 }}>
         <Box display="flex" justifyContent="center">
-          <MyCalendar date={date} today={today} onChange={onChange} />
+          {/* <MyCalendar date={date} today={today} onChange={onChange} /> */}
+          <CalendarShedule date={date} today={today} onChange={onChange} />
         </Box>
       </Fade>
       <br />

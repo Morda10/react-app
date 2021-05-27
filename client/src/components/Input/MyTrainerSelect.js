@@ -30,7 +30,7 @@ const MyTrainerSelect = ({ label, trainers, newTrainer, ...props }) => {
         style={{ display: "flex", maxWidth: "70%", marginBottom: "1em" }}
       >
         <InputLabel>{label}</InputLabel>
-        <Select {...field} {...props} error={error}>
+        <Select {...field} {...props} error={error} >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>

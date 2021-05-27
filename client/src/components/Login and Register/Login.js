@@ -10,6 +10,7 @@ import {
   CardContent,
   Box,
   Checkbox,
+  FormControlLabel,
 } from "@material-ui/core";
 import MyTextField from "../Input/Input";
 import axios from "axios";
@@ -77,7 +78,8 @@ const Login = () => {
       const res = await axios.post("/api/login/loginTrainer", values);
       const { token } = res.data;
       dispatch(setUser({ user: token }));
-      if (user) {
+      if (user.user != null) {
+        console.log(user.user)
         if (user.user.rank === 1 || user.user.rank === 0) {
           history.push("/TrainerHomePage");
         } else {
@@ -87,7 +89,7 @@ const Login = () => {
       }
       history.push("/");
     } catch (e) {
-      setErrors(e.response.data.errors[0].msg);
+      setErrors(e);
     }
   };
 
@@ -135,17 +137,23 @@ const Login = () => {
                 validationSchema={validationSchema}
                 onSubmit={async (values, actions) => {
                   try {
-                    const res = await axios.post("/api/login/loginTrainee", values);
+                    const loginLink = isTrainer ? "/api/login/loginTrainer" : "/api/login/loginTrainee"
+                    const res = await axios.post(loginLink, values);
+                    console.log(res)
                     const { token } = res.data;
-                    dispatch(setUser(token));
+                    dispatch(setUser({user: token}));
+                    dispatch(setToken({ token: token }));
+                   if(user){
                     if (user.user.rank === 1 || user.user.rank === 0) {
                       history.push("/TrainerHomePage");
                     } else {
                       console.log(user.user);
                       history.push("/Login");
                     }
+                   }
                   } catch (e) {
-                    setErrors(e.response.data.errors[0].msg);
+                    // setErrors(e);
+                    console.log(e)
                     actions.resetForm();
                   }
                 }}
@@ -165,12 +173,21 @@ const Login = () => {
                       type="password"
                       label="Password "
                     />
-                    {/* <Checkbox
-                      checked={isTrainer}
-                      // name="trainer"
-                      label="Password "
-                      onChange={handleChange}
-                    /> */}
+                     <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isTrainer}
+                        onChange={handleChange}
+                        value={isTrainer}
+                        color="primary"
+                        name="LoginTrainer"
+                        size="small"
+                      />
+                    }
+                    label="Login Trainer"
+                    labelPlacement="end"
+                  />
+              
                     <br />
                     <Button
                       className={classes.button}

@@ -15,6 +15,8 @@ import { setMeasurements } from '../../../redux/reducers/UserReducer'
 import MyTextField from '../../Input/Input'
 import Axios from 'axios'
 import { Form, Formik } from 'formik'
+import * as Yup from "yup";
+
 
 
 const useStyles = makeStyles({
@@ -35,6 +37,27 @@ const useStyles = makeStyles({
     },
   });
 
+  const validationSchema = Yup.object().shape({
+    date: Yup.date()
+      .required("Email is required"),
+      weight: Yup.number()
+      .min(0, "Weight can't be negative")
+      .max(200, "Max weight is 200")
+      .required("Weight is required"),
+      waist: Yup.number()
+      .min(0, "waist can't be negative")
+      .required("Waist measurement is required"),
+      arms: Yup.number()
+      .min(0, "arms can't be negative")
+      .required("Arms measurement is required"),
+      thighes: Yup.number()
+      .min(0, "thighes can't be negative")
+      .required("Thighes measurement is required"),
+      pelvis: Yup.number()
+      .min(0, "pelvis can't be negative")
+      .required("Pelvis measurement is required"),
+  });
+
 export const NewMeasurement = ({addingRow}) => {
     const classes = useStyles();
     const user = useSelector(state => state.user)
@@ -48,9 +71,10 @@ export const NewMeasurement = ({addingRow}) => {
                 className={classes.date}
                 name="date"
                 type="date"
+               
             />
         </TableCell>
-        <TableCell align="right"> 
+        <TableCell align="left"> 
             <MyTextField
                 className={classes.textField}
                 name="weight"
@@ -107,18 +131,18 @@ export const NewMeasurement = ({addingRow}) => {
     const formikVar = 
     ( <Formik
         initialValues={{
-        date: new moment(),
+        date: moment().format('YYYY-MM-DD'),
         weight: 0,
-        weist: 0,
+        waist: 0,
         arms: 0,
         thighes: 0,
         pelvis: 0,
         }}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
         onSubmit={async (values, actions) => {
         try {
-            const res = await Axios.post("/api/measurements/createMeasurement", {user: user.user.id, measurements: values});
-
+            const res = await Axios.post("/api/measurements/createMeasurement", {user: user.user.id, measurement: values});
+            console.log(res.data)
             // check for errors
             if(!res.data.err)   dispatch(setMeasurements({measurements : res.data.measurements}));
             else setErrors(res.data.err)

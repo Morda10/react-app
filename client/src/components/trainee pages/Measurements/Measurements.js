@@ -27,7 +27,7 @@ export const Measurements = () => {
     }
 
     useEffect(() => {
-       if(measurementsChached.length > 0){
+       if(measurementsChached && measurementsChached.length > 0){
            console.log("Chached")
            setMeasurementsArr(measurementsChached)
            return
@@ -39,7 +39,7 @@ export const Measurements = () => {
            console.log(e)
        }
        
-    }, [])
+    }, [measurementsChached])
 
     return (
         <div>

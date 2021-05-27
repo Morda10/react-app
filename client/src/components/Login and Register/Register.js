@@ -69,7 +69,8 @@ const Register = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await Axios.get("/api/trainers/");
+        const res = await Axios.get("/api/users/getAllTrainers");
+        console.log(res.data)
         if (res.data.length !== 0) {
           settrainers(res.data);
         }
@@ -107,9 +108,9 @@ const Register = () => {
                 console.log(NewTrainer);
                 try {
                   if (NewTrainer) {
-                    await axios.post("/api/users/newTrainer", values);
+                    await axios.post("/api/users/registerNewTrainer", values);
                   } else {
-                    await axios.post("/api/users/", values);
+                    await axios.post("/api/users/registerNewTrainee", values);
                   }
                   history.push("/TrainerHomePage");
                   return;
@@ -165,6 +166,7 @@ const Register = () => {
                     label="Trainer "
                     trainers={trainers}
                     newTrainer={NewTrainer}
+
                   />
                   <Button
                     className={classes.button}
